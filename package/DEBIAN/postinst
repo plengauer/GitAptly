@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+rm -rf /opt/gitaptly/*
+python3 -m venv /opt/gitaptly/
+source /opt/gitaptly/bin/activate
+# installs here (TODO otel)
+deactivate
+
+systemctl daemon-reload
+systemctl enable gitaptly
+systemctl start gitaptly

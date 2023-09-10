@@ -1,0 +1,5 @@
+#!/bin/bash
+systemctl daemon-reload
+rm -rf /var/lib/gitaptly
+rm -rf /opt/gitaptly
+exit 0

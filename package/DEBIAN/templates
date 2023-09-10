@@ -1,0 +1,4 @@
+Template: gitaptly/PORT
+Type: string
+Description: Port:
+ Select the port where the repository should be hosted at.

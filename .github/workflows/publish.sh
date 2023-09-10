@@ -1,0 +1,37 @@
+name: Publish
+
+on:
+  push:
+    branches: main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./package
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: sudo apt-get install devscripts debhelper
+      - run: echo "::set-output name=version::$(cat ./DEBIAN/control | grep 'Version' | awk -F\  '{print $2}')"
+        id: version
+      - run: dpkg-deb --root-owner-group --build . ../package.deb
+      - uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_RELEASE_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: Release v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+      - uses: actions/upload-release-asset@v1
+        id: upload-release-asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./package.deb
+          asset_name: gitaptly_${{ steps.version.outputs.version }}.deb
+          asset_content_type: application/octet-stream

@@ -1,0 +1,4 @@
+1) DONE
+2) get rid of the downloads and just keep the actual hashes and package index on disk
+3) move all of that into a docker container? - no
+4) clear all packages that are not valid deb files before re-indexing

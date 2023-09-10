@@ -1,0 +1,4 @@
+#!/bin/bash
+systemctl stop gitaptly
+systemctl disable gitaptly
+exit 0

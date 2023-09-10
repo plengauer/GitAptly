@@ -1,0 +1,8 @@
+Package: gitaptly
+Version: 1.0.0
+Architecture: all
+Depends: debconf, bash, cron, gzip, dpkg-dev, wget, python3, python3-pip, python3-venv
+Priority: extra
+Maintainer: Philipp Lengauer <p.lengauer@gmail.com>
+Homepage: https://github.com/plengauer/GitAptly
+Description: A apt-repo-like facade for GitHub releases
