@@ -4,7 +4,7 @@ set -e
 repo_location=/var/lib/gitaptly/apt-repo
 
 # the following line is just for compatibility in case old versions have been installed
-rm $repo_location/pool/main/*.deb
+rm $repo_location/pool/main/*.deb || true
 
 while read line; do
   line=$(echo "$line" | xargs)
