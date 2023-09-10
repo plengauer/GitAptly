@@ -7,6 +7,8 @@ source /opt/gitaptly/bin/activate
 # installs here (TODO otel)
 deactivate
 
+bash /usr/bin/gitaptly_update.sh
+
 systemctl daemon-reload
 systemctl enable gitaptly
 systemctl start gitaptly
