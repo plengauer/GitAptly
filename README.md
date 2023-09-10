@@ -5,3 +5,5 @@ echo "deb [arch=all] http://philbot.eu:8000/apt-repo stable main" | sudo tee /et
 sudo apt-get update --allow-insecure-repositories
 sudo apt-get install gitaptly
 ```
+
+edit `/etc/gitaptly.conf` by adding new github repos to pull debian packages from. 
