@@ -2,3 +2,11 @@ Template: gitaptly/PORT
 Type: string
 Description: Port:
  Select the port where the repository should be hosted at.
+
+Template: gitaptly/MODE
+Type: select
+Choices: cache, proxy
+Default: cache
+Description: Mode:
+ Select whether the repository should cache deb files on disk or act as a pure proxy
+

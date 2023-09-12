@@ -6,4 +6,8 @@ db_beginblock
 db_input high gitaptly/PORT || true
 db_endblock
 
+db_beginblock
+db_input high gitaptly/MODE || true
+db_endblock
+
 db_go
