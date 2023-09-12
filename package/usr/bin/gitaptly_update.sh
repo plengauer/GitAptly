@@ -2,9 +2,9 @@
 set -e
 cd /var/lib/gitaptly/apt-repo
 
-mode=$(bash /usr/bin/gitaptly_mode.sh | sed 's/ *$//g')
+mode=$(bash /usr/bin/gitaptly_mode.sh 2>&1 | sed 's/ *$//g')
 
-if [ $mode = 'cache' ]; then
+if [ "$mode" = 'cache' ]; then
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
@@ -17,7 +17,7 @@ if [ $mode = 'cache' ]; then
   done < /etc/gitaptly.conf
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
-elif [ $mode = 'proxy' ]; then
+elif [ "$mode" = 'proxy' ]; then
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
