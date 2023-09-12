@@ -2,9 +2,9 @@
 set -e
 cd /var/lib/gitaptly/apt-repo
 
-mode=$(bash /usr/bin/gitaptly_mode.sh 2>&1 | sed 's/ *$//g')
+source /opt/gitaptly/env
 
-if [ "$mode" = 'cache' ]; then
+if [ "$MODE" = 'cache' ]; then
   rm -rf cgi-bin/pool/main/*
   while read line; do
     line=$(echo "$line" | xargs)
@@ -18,7 +18,7 @@ if [ "$mode" = 'cache' ]; then
   done < /etc/gitaptly.conf
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
-elif [ "$mode" = 'proxy' ]; then
+elif [ "$MODE" = 'proxy' ]; then
   rm -rf pool/main/*
   rm -f dists/stable/main/binary-all/Packages
   while read line; do
