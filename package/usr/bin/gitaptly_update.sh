@@ -5,6 +5,7 @@ cd /var/lib/gitaptly/apt-repo
 mode=$(bash /usr/bin/gitaptly_mode.sh 2>&1 | sed 's/ *$//g')
 
 if [ "$mode" = 'cache' ]; then
+  rm -rf cgi-bin/pool/main/*
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
@@ -18,6 +19,7 @@ if [ "$mode" = 'cache' ]; then
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
 elif [ "$mode" = 'proxy' ]; then
+  rm -rf pool/main/*
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
@@ -26,7 +28,7 @@ elif [ "$mode" = 'proxy' ]; then
     owner=$(echo $line | cut -d "/" -f 1)
     repo=$(echo $line | cut -d "/" -f 2)
     mkdir -p pool/main/$owner/$repo cgi-bin/pool/main/$owner/$repo
-    rm dists/stable/main/binary-all/Packages
+    rm -f dists/stable/main/binary-all/Packages
     for url in $(bash /usr/bin/gitaptly_scan.sh $owner $repo)
     do
       file=$(echo $url | rev | cut -d "/" -f 1 | rev)
