@@ -20,6 +20,7 @@ if [ "$mode" = 'cache' ]; then
 
 elif [ "$mode" = 'proxy' ]; then
   rm -rf pool/main/*
+  rm -f dists/stable/main/binary-all/Packages
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
@@ -28,7 +29,6 @@ elif [ "$mode" = 'proxy' ]; then
     owner=$(echo $line | cut -d "/" -f 1)
     repo=$(echo $line | cut -d "/" -f 2)
     mkdir -p pool/main/$owner/$repo cgi-bin/pool/main/$owner/$repo
-    rm -f dists/stable/main/binary-all/Packages
     for url in $(bash /usr/bin/gitaptly_scan.sh $owner $repo)
     do
       file=$(echo $url | rev | cut -d "/" -f 1 | rev)
