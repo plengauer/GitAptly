@@ -5,7 +5,7 @@ on:
     branches: main
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -14,9 +14,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get install devscripts debhelper
+      - run: dpkg-deb --root-owner-group --build . ../package.deb
+      - uses: actions/upload-artifact@v2
+        with:
+          name: package.deb
+          path: ../package.deb
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
       - run: echo "::set-output name=version::$(cat ./DEBIAN/control | grep 'Version' | awk -F\  '{print $2}')"
         id: version
-      - run: dpkg-deb --root-owner-group --build . ../package.deb
+      - uses: actions/download-artifact@v2
+        with:
+          name: package.deb
       - uses: actions/create-release@v1
         id: create_release
         env:
