@@ -50,7 +50,7 @@ jobs:
       - run: sudo apt-get -y remove gitaptly
 
   publish:
-    needs: test-clean-install, test-upgrade
+    needs: [build, test-clean-install, test-upgrade]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
