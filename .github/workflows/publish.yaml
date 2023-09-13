@@ -10,7 +10,6 @@ jobs:
     defaults:
       run:
         working-directory: ./package
-
     steps:
       - uses: actions/checkout@v2
       - run: sudo apt-get install devscripts debhelper
@@ -20,10 +19,39 @@ jobs:
           name: package.deb
           path: ../package.deb
 
-  publish:
+  test-clean-install:
     needs: build
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: package.deb
+      - run: sudo apt-get -y install ./package.deb
+      - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
+      - run: sleep 10
+      - run: sudo apt-get update --allow-unauthenticated-repositories
+      - run: sudo apt-get -y install --allow-unauthenticated auto-management
+      - run: sudo apt-get -y remove gitaptly
 
+  test-upgrade:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
+      - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
+      - uses: actions/download-artifact@v2
+        with:
+          name: package.deb
+      - run: sudo apt-get -y install ./package.deb
+      - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
+      - run: sleep 10
+      - run: sudo apt-get update --allow-unauthenticated-repositories
+      - run: sudo apt-get -y install --allow-unauthenticated auto-management
+      - run: sudo apt-get -y remove gitaptly
+
+  publish:
+    needs: test-clean-install, test-upgrade
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: echo "::set-output name=version::$(cat ./DEBIAN/control | grep 'Version' | awk -F\  '{print $2}')"
