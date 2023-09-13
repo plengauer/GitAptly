@@ -4,6 +4,10 @@ cd /var/lib/gitaptly/apt-repo
 
 source /opt/gitaptly/env
 
+# TODO handle if one mode is switched to the other (packages and evrything needs to be cleared and fully re-initialized)
+# TODO clean if deb packages are remove
+# TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
+
 if [ "$MODE" = 'cache' ]; then
   rm -rf cgi-bin/pool/main/*
   while read line; do
@@ -20,8 +24,6 @@ if [ "$MODE" = 'cache' ]; then
 
 elif [ "$MODE" = 'proxy' ]; then
   rm -rf pool/main/*
-  rm -f dists/stable/main/binary-all/Packages
-  #TODO cgi-bin needs to be root, not apt-repo/cgi-bin 
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
