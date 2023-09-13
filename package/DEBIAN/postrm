@@ -1,6 +1,6 @@
 #!/bin/bash
 systemctl daemon-reload
-if [ "$1" = "remove" ] or [ "$1" = "purge" ]; then
+if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
   rm -rf /var/lib/gitaptly /opt/gitaptly
 else
   rm -rf /opt/gitaptly/*

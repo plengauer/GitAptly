@@ -9,6 +9,8 @@ echo "PORT=$RET" >> /opt/gitaptly/env
 db_get gitaptly/MODE
 echo "MODE=$RET" >> /opt/gitaptly/env
 
+ln --symbolic /var/lib/gitaptly/pool /var/lib/gitaptly/cgi-bin || true
+
 python3 -m venv /opt/gitaptly/
 source /opt/gitaptly/bin/activate
 # installs here (TODO otel)

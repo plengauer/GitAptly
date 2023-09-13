@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-cd /var/lib/gitaptly/apt-repo
+cd /var/lib/gitaptly
 
 source /opt/gitaptly/env
 
@@ -9,7 +9,6 @@ source /opt/gitaptly/env
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
 if [ "$MODE" = 'cache' ]; then
-  rm -rf cgi-bin/pool/main/*
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
@@ -23,7 +22,6 @@ if [ "$MODE" = 'cache' ]; then
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
 elif [ "$MODE" = 'proxy' ]; then
-  rm -rf pool/main/*
   while read line; do
     line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
@@ -31,17 +29,17 @@ elif [ "$MODE" = 'proxy' ]; then
     fi
     owner=$(echo $line | cut -d "/" -f 1)
     repo=$(echo $line | cut -d "/" -f 2)
-    mkdir -p pool/main/$owner/$repo cgi-bin/pool/main/$owner/$repo
+    mkdir -p pool/main/$owner/$repo
     for url in $(bash /usr/bin/gitaptly_scan.sh $owner $repo)
     do
       file=$(echo $url | rev | cut -d "/" -f 1 | rev)
-      if [ -f cgi-bin/pool/main/$owner/$repo/$file ]; then
+      if [ -f pool/main/$owner/$repo/$file ]; then
         continue
       fi
       wget -q -nc -O pool/main/$owner/$repo/$file $url
-      ln --symbolic /usr/bin/gitaptly_serve.sh cgi-bin/pool/main/$owner/$repo/$file
-      dpkg-scanpackages --multiversion pool/ | sed -e "s/Filename: pool/Filename: cgi-bin\/pool/" >> dists/stable/main/binary-all/Packages
+      dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
       rm pool/main/$owner/$repo/$file
+      ln --symbolic /usr/bin/gitaptly_serve.sh pool/main/$owner/$repo/$file
     done
   done < /etc/gitaptly.conf
 
