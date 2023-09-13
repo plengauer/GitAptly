@@ -6,3 +6,4 @@ Priority: extra
 Maintainer: Philipp Lengauer <p.lengauer@gmail.com>
 Homepage: https://github.com/plengauer/GitAptly
 Description: A apt-repo-like facade for GitHub releases
+

@@ -29,7 +29,7 @@ jobs:
       - run: sudo apt-get -y install ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sleep 10
-      - run: sudo apt-get update --allow-unauthenticated-repositories
+      - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
 
@@ -45,7 +45,7 @@ jobs:
       - run: sudo apt-get -y install ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sleep 10
-      - run: sudo apt-get update --allow-unauthenticated-repositories
+      - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
 
