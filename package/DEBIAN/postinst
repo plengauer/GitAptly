@@ -19,11 +19,10 @@ deactivate
 
 source /opt/gitaptly/env
 if [ "$MODE" = "cache" ]; then
-  rm $(find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l)
+  rm $(find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l) || true
 elif [ "$MODE" = "proxy" ]; then
-  rm $(find /var/lib/gitaptly/pool/main/*/*/ -type f)
+  rm $(find /var/lib/gitaptly/pool/main/*/*/ -type f) || true
 fi
-find /var/lib/gitaptly/pool/main/*/*/ -type l
 bash /usr/bin/gitaptly_update.sh
 
 systemctl daemon-reload
