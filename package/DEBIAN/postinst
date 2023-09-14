@@ -1,23 +1,33 @@
 #!/bin/bash
 set -e
 
-rm -rf /opt/gitaptly/*
+rm -rf /opt/gitaptly/* || true
 
 . /usr/share/debconf/confmodule
 db_get gitaptly/PORT
 echo "PORT=$RET" >> /opt/gitaptly/env
 db_get gitaptly/MODE
 echo "MODE=$RET" >> /opt/gitaptly/env
+db_get gitaptly/OTLP_TRACES_ENDPOINT
+echo "OTLP_TRACES_ENDPOINT=\"$RET\"" >> /opt/gitaptly/env
+db_get gitaptly/OTLP_TRACES_HEADER
+echo "OTLP_TRACES_HEADER=\"$RET\"" >> /opt/gitaptly/env
+db_get gitaptly/OTLP_METRICS_ENDPOINT
+echo "OTLP_METRICS_ENDPOINT=\"$RET\"" >> /opt/gitaptly/env
+db_get gitaptly/OTLP_METRICS_HEADER
+echo "OTLP_METRICS_HEADER=\"$RET\"" >> /opt/gitaptly/env
 
 ln --symbolic /var/lib/gitaptly/pool /var/lib/gitaptly/cgi-bin || true
+source /opt/gitaptly/env
 
 python3 -m venv /opt/gitaptly/
 source /opt/gitaptly/bin/activate
-# installs here (TODO otel)
+if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ]; then
+  pip3 install opentelemetry-distro opentelemetry-exporter-otlp
+  opentelemetry-bootstrap -a install
+fi
 deactivate
 
-
-source /opt/gitaptly/env
 if [ "$MODE" = "cache" ]; then
   rm $(find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l) || true
 elif [ "$MODE" = "proxy" ]; then

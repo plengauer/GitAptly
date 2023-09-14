@@ -8,5 +8,28 @@ Type: select
 Choices: cache, proxy
 Default: proxy
 Description: Mode:
- Select whether the repository should cache deb files on disk or act as a pure proxy
+ Select whether the repository should cache deb files on disk or act as a pure proxy.
 
+Template: gitaptly/OTLP_TRACES_ENDPOINT
+Type: string
+Default: 
+Description: OTLP Traces Endpoint:
+ Define the OTLP Endpoint to send traces to, empty if no observability data should be collected.
+
+Template: gitaptly/OTLP_METRICS_ENDPOINT
+Type: string
+Default:
+Description: OTLP Endpoint:
+ Define the OTLP Metrics Endpoint to send metrics to, empty if no observability data should be collected.
+
+Template: gitaptly/OTLP_TRACES_HEADER
+Type: string
+Default:
+Description: OTLP Traces API Token:
+ Define the API Token for the OTLP Traces Endpoint, empty if none is required.
+
+Template: gitaptly/OTLP_METRICS_HEADER
+Type: string
+Default:
+Description: OTLP Metrics API Token:
+ Define the API Token for the OTLP Metrics Endpoint, empty if none is required.
