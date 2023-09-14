@@ -16,6 +16,14 @@ source /opt/gitaptly/bin/activate
 # installs here (TODO otel)
 deactivate
 
+
+source /opt/gitaptly/env
+if [ "$MODE" = "cache" ]; then
+  rm $(find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l)
+elif [ "$MODE" = "proxy" ]; then
+  rm $(find /var/lib/gitaptly/pool/main/*/*/ -type f)
+fi
+find /var/lib/gitaptly/pool/main/*/*/ -type l
 bash /usr/bin/gitaptly_update.sh
 
 systemctl daemon-reload
