@@ -6,7 +6,7 @@ Description: Port:
 Template: gitaptly/MODE
 Type: select
 Choices: cache, proxy
-Default: cache
+Default: proxy
 Description: Mode:
  Select whether the repository should cache deb files on disk or act as a pure proxy
 
