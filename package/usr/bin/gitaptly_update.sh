@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+source /usr/bin/opentelemetry_bash.sh
 cd /var/lib/gitaptly
 
 source /opt/gitaptly/env

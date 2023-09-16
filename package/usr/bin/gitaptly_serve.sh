@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+source /usr/bin/opentelemetry_bash.sh
 
 path="$SCRIPT_NAME"
 file=$(echo "$path" | rev | cut -d/ -f1 | rev)
