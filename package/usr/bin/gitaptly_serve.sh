@@ -1,5 +1,9 @@
 #!/bin/bash
 set -e
+source /opt/gitaptly/env
+export OTEL_SERVICE_NAME=GitAptly
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
+export OTEL_EXPORTER_OTLP_TRACES_HEADERS="$OTLP_TRACES_HEADERS"
 source /usr/bin/opentelemetry_bash.sh
 
 path="$SCRIPT_NAME"
