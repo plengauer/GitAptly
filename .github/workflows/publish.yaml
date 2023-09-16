@@ -28,7 +28,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: package.deb
-      - run: sudo apt-get -y install ./package.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sleep 10
       - run: sudo apt-get update --allow-insecure-repositories
@@ -42,11 +42,11 @@ jobs:
       - run: echo "deb [arch=all] http://philbot.eu:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sudo apt-get update --allow-insecure-repositories
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
-      - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.0.0.deb
       - uses: actions/download-artifact@v2
         with:
           name: package.deb
-      - run: sudo apt-get -y install ./package.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sleep 10
       - run: sudo apt-get update --allow-insecure-repositories
