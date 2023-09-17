@@ -23,8 +23,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "deb [arch=all] http://philbot.eu:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
-      - run: sudo apt-get update --allow-insecure-repositories
       - uses: actions/download-artifact@v2
         with:
           name: package.deb
@@ -39,8 +37,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "deb [arch=all] http://philbot.eu:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
-      - run: sudo apt-get update --allow-insecure-repositories
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
       - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.0.0.deb
       - uses: actions/download-artifact@v2
