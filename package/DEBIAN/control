@@ -1,8 +1,8 @@
 Package: gitaptly
-Version: 2.4.2
+Version: 2.4.3
 Architecture: all
 Depends: debconf, bash, jq, cron, gzip, dpkg-dev, wget, python3, python3-pip, python3-venv
-Suggests: opentelemetry-bash
+Suggests: opentelemetry-bash (>= 0.1.0)
 Priority: extra
 Maintainer: Philipp Lengauer <p.lengauer@gmail.com>
 Homepage: https://github.com/plengauer/GitAptly

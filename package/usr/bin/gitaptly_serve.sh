@@ -15,4 +15,4 @@ owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
 echo "Content-Type: application/vnd.debian.binary-package"
 echo ""
-wget -O - $(bash /usr/bin/gitaptly_scan.sh $owner $repo | (grep "$file"'$' || true) | head --lines=1)
+otel_observe wget -O - $(bash /usr/bin/gitaptly_scan.sh $owner $repo | (grep "$file"'$' || true) | head --lines=1)
