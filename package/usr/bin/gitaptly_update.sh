@@ -24,9 +24,9 @@ if [ "$MODE" = 'cache' ]; then
     owner=$(echo $line | cut -d "/" -f 1)
     repo=$(echo $line | cut -d "/" -f 2)
     mkdir -p pool/main/$owner/$repo
-    otel_observe wget -q -nc -P pool/main/$owner/$repo $(bash /usr/bin/gitaptly_scan.sh $owner $repo) || true
+    wget -q -nc -P pool/main/$owner/$repo $(bash /usr/bin/gitaptly_scan.sh $owner $repo) || true
   done < /etc/gitaptly.conf
-  otel_observe dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
+  dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
 elif [ "$MODE" = 'proxy' ]; then
   while read line; do
@@ -43,8 +43,8 @@ elif [ "$MODE" = 'proxy' ]; then
       if [ -f pool/main/$owner/$repo/$file ]; then
         continue
       fi
-      otel_observe wget -q -nc -O pool/main/$owner/$repo/$file $url
-      otel_observe dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
+      wget -q -nc -O pool/main/$owner/$repo/$file $url
+      dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
       rm pool/main/$owner/$repo/$file
       ln --symbolic /usr/bin/gitaptly_serve.sh pool/main/$owner/$repo/$file
     done
@@ -54,5 +54,5 @@ else
   exit 1
 fi
 
-otel_observe gzip -9 < dists/stable/main/binary-all/Packages > dists/stable/main/binary-all/Packages.gz
-otel_observe bash /usr/bin/gitaptly_create_release.sh dists/stable > dists/stable/Release
+gzip -9 < dists/stable/main/binary-all/Packages > dists/stable/main/binary-all/Packages.gz
+bash /usr/bin/gitaptly_create_release.sh dists/stable > dists/stable/Release
