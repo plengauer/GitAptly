@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
 source /opt/gitaptly/env
-export OTEL_SERVICE_NAME=GitAptly
-export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
-export OTEL_EXPORTER_OTLP_TRACES_HEADERS="$OTLP_TRACES_HEADERS"
-source /usr/bin/opentelemetry_bash.sh
+if [ -f /usr/bin/opentelemetry_bash.sh ]; then
+  export OTEL_SERVICE_NAME=GitAptly
+  export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
+  export OTEL_EXPORTER_OTLP_TRACES_HEADERS=authorization=$(echo "$OTLP_TRACES_HEADER" | jq -Rr @uri)
+  source /usr/bin/opentelemetry_bash.sh
+fi
 
 path="$SCRIPT_NAME"
 file=$(echo "$path" | rev | cut -d/ -f1 | rev)
