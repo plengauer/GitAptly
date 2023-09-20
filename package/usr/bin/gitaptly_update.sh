@@ -6,10 +6,8 @@ if [ -f /usr/bin/opentelemetry_bash.sh ]; then
   export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
   export OTEL_EXPORTER_OTLP_TRACES_HEADERS=authorization=$(echo "$OTLP_TRACES_HEADER" | jq -Rr @uri)
   source /usr/bin/opentelemetry_bash.sh
-else
-  otel_observe {
-    eval "$@"
-  }
+  otel_instrument dpkg-scanpackages
+  otel_instrument gzip
 fi
 cd /var/lib/gitaptly
 
@@ -30,7 +28,7 @@ if [ "$MODE" = 'cache' ]; then
     mkdir -p pool/main/$owner/$repo
     wget -q -nc -P pool/main/$owner/$repo $(bash /usr/bin/gitaptly_scan.sh $owner $repo) || true
   done < /etc/gitaptly.conf
- otel_observe dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
+  dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
 elif [ "$MODE" = 'proxy' ]; then
   while read line; do
@@ -48,7 +46,7 @@ elif [ "$MODE" = 'proxy' ]; then
         continue
       fi
       wget -q -nc -O pool/main/$owner/$repo/$file $url
-      otel_observe dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
+      dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
       rm pool/main/$owner/$repo/$file
       ln --symbolic /usr/bin/gitaptly_serve.sh pool/main/$owner/$repo/$file
     done
@@ -58,5 +56,5 @@ else
   exit 1
 fi
 
-otel_observe gzip -9 < dists/stable/main/binary-all/Packages > dists/stable/main/binary-all/Packages.gz
-otel_observe bash /usr/bin/gitaptly_create_release.sh dists/stable > dists/stable/Release
+gzip -9 < dists/stable/main/binary-all/Packages > dists/stable/main/binary-all/Packages.gz
+bash /usr/bin/gitaptly_create_release.sh dists/stable > dists/stable/Release
