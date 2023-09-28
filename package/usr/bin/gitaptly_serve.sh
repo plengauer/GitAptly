@@ -13,6 +13,10 @@ file=$(echo "$path" | rev | cut -d/ -f1 | rev)
 repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
+if [ -n "$root_span_id" ]; then
+  otel_span_attribute $root_span_id "http.route="/$owner/$repo
+fi
+
 echo "Content-Type: application/vnd.debian.binary-package"
 echo ""
 wget -O - $(bash /usr/bin/gitaptly_scan.sh $owner $repo | (grep "$file"'$' || true) | head --lines=1)
