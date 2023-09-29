@@ -1,2 +1,2 @@
-0 * * * * root /bin/bash /usr/bin/gitaptly_update.sh
+0 * * * * root gitaptly_update.sh
 
