@@ -7,6 +7,8 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_EXPORTER_OTLP_TRACES_HEADERS=authorization=$(echo "$OTLP_TRACES_HEADER" | jq -Rr @uri)
   source /usr/bin/opentelemetry_shell.sh
   otel_instrument dpkg-scanpackages
+  otel_outstrument cut
+  otel_outstrument rev
 fi
 cd /var/lib/gitaptly
 
