@@ -22,6 +22,12 @@ Default:
 Description: OTLP Endpoint:
  Define the OTLP Metrics Endpoint to send metrics to, empty if no observability data should be collected.
 
+Template: gitaptly/OTLP_LOGS_ENDPOINT
+Type: string
+Default:
+Description: OTLP Endpoint:
+ Define the OTLP Logs Endpoint to send metrics to, empty if no observability data should be collected.
+
 Template: gitaptly/OTLP_TRACES_HEADER
 Type: string
 Default:
@@ -33,3 +39,9 @@ Type: string
 Default:
 Description: OTLP Metrics API Token:
  Define the API Token for the OTLP Metrics Endpoint, empty if none is required.
+
+Template: gitaptly/OTLP_LOGS_HEADER
+Type: string
+Default:
+Description: OTLP Logs API Token:
+ Define the API Token for the OTLP Logs Endpoint, empty if none is required.

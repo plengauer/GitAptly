@@ -26,4 +26,12 @@ db_beginblock
 db_input high gitaptly/OTLP_METRICS_HEADER || true
 db_endblock
 
+db_beginblock
+db_input high gitaptly/OTLP_LOGS_ENDPOINT || true
+db_endblock
+
+db_beginblock
+db_input high gitaptly/OTLP_LOGS_HEADER || true
+db_endblock
+
 db_go
