@@ -16,13 +16,17 @@ db_get gitaptly/OTLP_METRICS_ENDPOINT
 echo "OTLP_METRICS_ENDPOINT=\"$RET\"" >> /opt/gitaptly/env
 db_get gitaptly/OTLP_METRICS_HEADER
 echo "OTLP_METRICS_HEADER=\"$RET\"" >> /opt/gitaptly/env
+db_get gitaptly/OTLP_LOGS_ENDPOINT
+echo "OTLP_LOGS_ENDPOINT=\"$RET\"" >> /opt/gitaptly/env
+db_get gitaptly/OTLP_LOGS_HEADER
+echo "OTLP_LOGS_HEADER=\"$RET\"" >> /opt/gitaptly/env
 
 ln --symbolic /var/lib/gitaptly/pool /var/lib/gitaptly/cgi-bin || true
 source /opt/gitaptly/env
 
 python3 -m venv /opt/gitaptly/
 source /opt/gitaptly/bin/activate
-if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ]; then
+if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ] || [ -n "$OTLP_LOGS_ENDPOINT" ]; then
   pip3 install opentelemetry-distro opentelemetry-exporter-otlp
   pip3 install opentelemetry-instrumentation opentelemetry-instrumentation-system-metrics
   opentelemetry-bootstrap -a install
