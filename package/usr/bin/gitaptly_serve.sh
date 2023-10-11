@@ -21,6 +21,12 @@ if [ -n "$otel_root_span_id" ]; then
   otel_span_attribute $otel_root_span_id http.route=/$owner/$repo
   otel_span_attribute $otel_root_span_id github.repository.owner=$owner
   otel_span_attribute $otel_root_span_id github.repository.name=$repo
+  otel_span_attribute $otel_root_span_id github.repository.file=$file
+  otel_metric=$(otel_metric_create "gitaptly.downloads")
+  otel_metric_attribute $otel_metric github.repository.owner=$owner
+  otel_metric_attribute $otel_metric github.repository.repo=$repo
+  otel_metric_attribute $otel_metric github.repository.file=$file
+  otel_metric_add $otel_metric 1
 fi
 
 echo "Content-Type: application/vnd.debian.binary-package"
