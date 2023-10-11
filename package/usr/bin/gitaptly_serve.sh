@@ -18,7 +18,9 @@ repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
 if [ -n "$otel_root_span_id" ]; then
-  otel_span_attribute $otel_root_span_id "http.route="/$owner/$repo
+  otel_span_attribute $otel_root_span_id http.route=/$owner/$repo
+  otel_span_attribute $otel_root_span_id github.repository.owner=$owner
+  otel_span_attribute $otel_root_span_id github.repository.name=$repo
 fi
 
 echo "Content-Type: application/vnd.debian.binary-package"
