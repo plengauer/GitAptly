@@ -34,7 +34,7 @@ if [ "$MODE" = 'cache' ]; then
     owner=$(echo $line | cut -d "/" -f 1)
     repo=$(echo $line | cut -d "/" -f 2)
     mkdir -p pool/main/$owner/$repo
-    wget -q -nc -P pool/main/$owner/$repo $(bash /usr/bin/gitaptly_scan.sh $owner $repo) || true
+    wget -nc -P pool/main/$owner/$repo $(bash /usr/bin/gitaptly_scan.sh $owner $repo) || true
   done < /etc/gitaptly.conf
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 
@@ -53,7 +53,7 @@ elif [ "$MODE" = 'proxy' ]; then
       if [ -f pool/main/$owner/$repo/$file ]; then
         continue
       fi
-      wget -q -nc -O pool/main/$owner/$repo/$file $url
+      wget -nc -O pool/main/$owner/$repo/$file $url
       dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
       rm pool/main/$owner/$repo/$file
       ln --symbolic /usr/bin/gitaptly_serve.sh pool/main/$owner/$repo/$file
