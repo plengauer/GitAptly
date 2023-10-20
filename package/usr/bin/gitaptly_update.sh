@@ -56,7 +56,7 @@ elif [ "$MODE" = 'proxy' ]; then
       wget -nc -O pool/main/$owner/$repo/$file $url
       dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" >> dists/stable/main/binary-all/Packages
       rm pool/main/$owner/$repo/$file
-      ln --symbolic /usr/bin/gitaptly_serve.sh pool/main/$owner/$repo/$file
+      ln --symbolic /usr/bin/gitaptly_serve.sh cgi-bin/main/$owner/$repo/$file
     done
   done < /etc/gitaptly.conf
 
