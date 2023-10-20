@@ -21,7 +21,6 @@ echo "OTLP_LOGS_ENDPOINT=\"$RET\"" >> /opt/gitaptly/env
 db_get gitaptly/OTLP_LOGS_HEADER
 echo "OTLP_LOGS_HEADER=\"$RET\"" >> /opt/gitaptly/env
 
-ln --symbolic /var/lib/gitaptly/pool /var/lib/gitaptly/cgi-bin || true
 source /opt/gitaptly/env
 
 python3 -m venv /opt/gitaptly/
