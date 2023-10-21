@@ -47,6 +47,7 @@ elif [ "$MODE" = 'proxy' ]; then
     owner=$(echo $line | cut -d "/" -f 1)
     repo=$(echo $line | cut -d "/" -f 2)
     mkdir -p pool/main/$owner/$repo
+    mkdir -p cgi-bin/main/$owner/$repo
     for url in $(bash /usr/bin/gitaptly_scan.sh $owner $repo)
     do
       file=$(echo $url | rev | cut -d "/" -f 1 | rev)
