@@ -51,7 +51,7 @@ elif [ "$MODE" = 'proxy' ]; then
     for url in $(bash /usr/bin/gitaptly_scan.sh $owner $repo)
     do
       file=$(echo $url | rev | cut -d "/" -f 1 | rev)
-      if [ -f pool/main/$owner/$repo/$file ]; then
+      if [ -f cgi-bin/main/$owner/$repo/$file ]; then
         continue
       fi
       wget -nc -O pool/main/$owner/$repo/$file $url
