@@ -1,3 +1,6 @@
 #!/bin/bash
 systemctl stop gitaptly
+if [ -L "/var/lib/gitaptly/cgi-bin" ]; then
+  rm /var/lib/gitaptly/cgi-bin
+fi
 exit 0
