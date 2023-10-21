@@ -37,8 +37,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.12.0/gitaptly_2.12.0.deb
-      - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.12.0.deb
+      - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.0.0.deb
       - uses: actions/download-artifact@v2
         with:
           name: package.deb
