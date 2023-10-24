@@ -13,9 +13,6 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="$OTLP_LOGS_ENDPOINT"
   export OTEL_EXPORTER_OTLP_LOGS_HEADERS=authorization=$(echo "$OTLP_LOGS_HEADER" | jq -Rr @uri)
   source /usr/bin/opentelemetry_shell.sh
-  otel_outstrument echo
-  otel_outstrument cut
-  otel_outstrument rev
 fi
 cd /var/lib/gitaptly
 
