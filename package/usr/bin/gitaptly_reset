@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 set -e
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
@@ -18,4 +18,4 @@ fi
 rm /var/lib/gitaptly/dists/stable/main/binary-all/Packages
 rm -rf /var/lib/gitaptly/pool/main/*
 rm -rf /var/lib/gitaptly/cgi-bin/main/*
-bash /usr/bin/gitaptly_update.sh
+gitaptly_update

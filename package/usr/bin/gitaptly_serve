@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 set -e
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
@@ -34,4 +34,4 @@ fi
 
 echo "Content-Type: application/vnd.debian.binary-package"
 echo ""
-wget -O - $(bash /usr/bin/gitaptly_scan.sh $owner $repo | (grep "$file"'$' || true) | head --lines=1)
+wget -O - $(gitaptly_scan $owner $repo | (grep "$file"'$' || true) | head --lines=1)
