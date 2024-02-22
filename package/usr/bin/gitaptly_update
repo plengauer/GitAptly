@@ -24,7 +24,6 @@ source /opt/gitaptly/env
 
 if [ "$MODE" = 'cache' ]; then
   while read line; do
-    line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
       continue
     fi
@@ -37,7 +36,6 @@ if [ "$MODE" = 'cache' ]; then
 
 elif [ "$MODE" = 'proxy' ]; then
   while read line; do
-    line=$(echo "$line" | xargs)
     if [ -z "$line" ]; then
       continue
     fi
