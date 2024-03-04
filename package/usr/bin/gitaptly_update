@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -e
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_SERVICE_NAME=GitAptly
@@ -22,20 +21,16 @@ source /opt/gitaptly/env
 # TODO clean if deb packages are remove
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
+# TODO make scan accept a single string as argument
+cat /etc/gitaptly.conf | xargs mkdir -p pool/main/
 if [ "$MODE" = 'cache' ]; then
-  while read line; do
-    if [ -z "$line" ]; then
-      continue
-    fi
-    owner=$(echo $line | cut -d "/" -f 1)
-    repo=$(echo $line | cut -d "/" -f 2)
-    mkdir -p pool/main/$owner/$repo
-    wget -nc -P pool/main/$owner/$repo $(gitaptly_scan $owner $repo) || true
-  done < /etc/gitaptly.conf
+  cat /etc/gitaptly.conf | xargs -i REPO parallel sh -e -c 'gitaptly_scan {} | xargs -i URL wget -nc -P /pool/main/{} URL ' -- REPO
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
-
 elif [ "$MODE" = 'proxy' ]; then
-  while read line; do
+  cat /etc/gitaptly.conf | xargs mkdir -p cgi-bin/main/
+  cat /etc/gitaptly.conf | TODO
+
+while read line; do
     if [ -z "$line" ]; then
       continue
     fi
