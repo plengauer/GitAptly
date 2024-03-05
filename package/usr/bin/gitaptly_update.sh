@@ -22,25 +22,27 @@ source /opt/gitaptly/env
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
 # TODO make scan accept a single string as argument
-cat /etc/gitaptly.conf | xargs -I {} mkdir -p pool/main/{}
+cat /etc/gitaptly.conf | xargs mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | xargs parallel -i bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}' --
+  cat /etc/gitaptly.conf | sort -R | xargs parallel -i bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/' --
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
   cat /etc/gitaptly.conf \
-    | xargs parallel -i bash -c 'gitaptly_scan {} | xargs -n 1 -I {URL} echo {}";"{URL}' -- \
-    | xargs parallel -i bash -c '
-      repo="$(echo "$*" | cut -d';' -f1)"
-      url="$(echo "$*" | cut -d';' -f2)"
-      file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
-      if [ -f cgi-bin/main/"$repo"/"$file" ]; then exit 0; fi
-      dpkg-scanpackages --multiversion pool/main/"$owner"/"$repo"/"$file" \
-        | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
-        | flock dists/stable/main/binary-all/Packages tee -a dists/stable/main/binary-all/Packages > /dev/null
-      rm pool/main/"$repo"/"$file"
-      ln --symbolic /usr/bin/gitaptly_serve cgi-bin/main/"$repo"/"$file"
-    ' bash --
+    | sort -R \
+    | xargs parallel gitaptly_scan \
+    | while read url; do
+        owner="$(echo "$url" | cut -d "/" -f 4)"
+        repo="$(echo "$url" | cut -d "/" -f 5)"
+        file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
+        if [ -f cgi-bin/main/"$owner"/"$repo"/"$file" ]; then continue; fi
+        wget -nc -O pool/main/$owner/$repo/$file $url
+        dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file \
+          | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
+          | flock dists/stable/main/binary-all/Packages tee -a dists/stable/main/binary-all/Packages
+        rm pool/main/$owner/$repo/$file
+        ln --symbolic /usr/bin/gitaptly_serve cgi-bin/main/$owner/$repo/$file
+      done
 else
   exit 1
 fi
