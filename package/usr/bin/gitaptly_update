@@ -22,13 +22,17 @@ source /opt/gitaptly/env
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
 # TODO make scan accept a single string as argument
-cat /etc/gitaptly.conf | xargs mkdir -p pool/main/
+cat /etc/gitaptly.conf | xargs -I {} mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | xargs -i REPO parallel sh -e -c 'gitaptly_scan {} | xargs -i URL wget -nc -P /pool/main/{} URL ' -- REPO
+  cat /etc/gitaptly.conf |
+    xargs -I {REPOS} parallel -i bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/' -- {REPOS}
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
-  cat /etc/gitaptly.conf | xargs mkdir -p cgi-bin/main/
-  cat /etc/gitaptly.conf | TODO
+  cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
+  cat /etc/gitaptly.conf |
+    xargs -I {REPOS} parallel -i bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/' -- {REPOS}
+    xargs -I {REPOS} parallel -i bash -c 'gitaptly_scan {} | xargs -n 1 echo {}' -- {REPOS} | # TESTED UNTIL HERE
+    parallel -i foo -- '{}'
 
 while read line; do
     if [ -z "$line" ]; then
