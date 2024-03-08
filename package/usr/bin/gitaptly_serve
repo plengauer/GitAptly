@@ -1,5 +1,4 @@
 #!/bin/bash -e
-set -e
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_SERVICE_NAME=GitAptly
