@@ -14,5 +14,5 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   source /usr/bin/opentelemetry_shell.sh
 fi
 
-parallel rm -rf -- /var/lib/gitaptly/dists/stable/main/binary-all/Packages /var/lib/gitaptly/pool/main/* /var/lib/gitaptly/cgi-bin/main/*
+parallel rm -rf ::: /var/lib/gitaptly/dists/stable/main/binary-all/Packages /var/lib/gitaptly/pool/main/* /var/lib/gitaptly/cgi-bin/main/*
 gitaptly_update
