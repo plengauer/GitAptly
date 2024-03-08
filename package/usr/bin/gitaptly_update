@@ -24,13 +24,13 @@ source /opt/gitaptly/env
 # TODO make scan accept a single string as argument
 cat /etc/gitaptly.conf | xargs mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | sort -R | xargs parallel -i bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/' --
+  cat /etc/gitaptly.conf | sort -R | xargs parallel -I {} bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/' :::
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
   cat /etc/gitaptly.conf \
     | sort -R \
-    | xargs parallel gitaptly_scan \
+    | xargs parallel gitaptly_scan ::: \
     | while read url; do
         owner="$(echo "$url" | cut -d "/" -f 4)"
         repo="$(echo "$url" | cut -d "/" -f 5)"
