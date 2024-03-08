@@ -33,9 +33,9 @@ fi
 deactivate
 
 if [ "$MODE" = "cache" ]; then
-  rm $(find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l) || true
+  find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l -exec rm {} '+' || true
 elif [ "$MODE" = "proxy" ]; then
-  rm $(find /var/lib/gitaptly/pool/main/*/*/ -type f) || true
+  find /var/lib/gitaptly/pool/main/*/*/ -type f - exec rm {} '+' || true
 fi
 gitaptly_update
 
