@@ -21,17 +21,15 @@ source /opt/gitaptly/env
 # TODO clean if deb packages are remove
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
-set -x
 cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | sort -R | parallel -v bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/'
+  cat /etc/gitaptly.conf | sort -R | parallel -q bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/'
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   gitaptly_proxy_process_url() {
     if [ -f /usr/bin/opentelemetry_shell.sh ]; then source /usr/bin/opentelemetry_shell.sh; fi
     set -e
     url="$*"
-    if [ -z "$url" ]; then return 0; fi
     owner="$(echo "$url" | cut -d "/" -f 4)"
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
