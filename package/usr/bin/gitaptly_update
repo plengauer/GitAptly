@@ -34,6 +34,7 @@ elif [ "$MODE" = 'proxy' ]; then
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
     if [ -f cgi-bin/main/"$owner"/"$repo"/"$file" ]; then return 0; fi
+    echo wget -nc -O pool/main/"$owner"/"$repo"/"$file" "$url"
     wget -nc -O pool/main/"$owner"/"$repo"/"$file" "$url"
     dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file \
       | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
