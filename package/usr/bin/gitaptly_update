@@ -34,7 +34,7 @@ elif [ "$MODE" = 'proxy' ]; then
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
     if [ -f cgi-bin/main/"$owner"/"$repo"/"$file" ]; then return 0; fi
-    wget -nc -O pool/main/$owner/$repo/$file $url
+    wget -nc -O pool/main/"$owner"/"$repo"/"$file" "$url"
     dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file \
       | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
       | flock dists/stable/main/binary-all/Packages tee -a dists/stable/main/binary-all/Packages
@@ -44,7 +44,7 @@ elif [ "$MODE" = 'proxy' ]; then
   export -f gitaptly_proxy_process_url
   touch dists/stable/main/binary-all/Packages
   cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
-  cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel gitaptly_proxy_process_url
+  cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel -v gitaptly_proxy_process_url
 else
   exit 1
 fi
