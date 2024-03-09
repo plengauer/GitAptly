@@ -21,9 +21,10 @@ source /opt/gitaptly/env
 # TODO clean if deb packages are remove
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
-cat /etc/gitaptly.conf | xargs -I {} mkdir -p pool/main/{}
+set -x
+cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | sort -R | parallel bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/'
+  cat /etc/gitaptly.conf | sort -R | parallel -v bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/'
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   gitaptly_proxy_process_url() {
@@ -44,8 +45,8 @@ elif [ "$MODE" = 'proxy' ]; then
   }
   export -f gitaptly_proxy_process_url
   touch dists/stable/main/binary-all/Packages
-  cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
-  cat /etc/gitaptly.conf | sort -R | parallel -v gitaptly_scan | parallel -v gitaptly_proxy_process_url
+  cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p cgi-bin/main/{}
+  cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel gitaptly_proxy_process_url
 else
   exit 1
 fi
