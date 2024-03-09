@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 systemctl daemon-reload
-if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
-  rm -rf /var/lib/gitaptly /opt/gitaptly
-else
+if [ "$1" = 'remove' ] || [ "$1" = 'purge' ] || [ "$1" = 'disappear' ]; then
+  rm -rf /var/lib/gitaptly /opt/gitaptly || true 
+elif [ "$1" = 'upgrade' ]; then
   rm -rf /opt/gitaptly/*
+elif [ "$1" = 'failed-upgrade' ] || [ "$1" = 'abort-install' ] || [ "$1" = 'abort-upgrade' ]; then
+  # nothing to do
+else
+  exit 1
 fi
-exit 0
