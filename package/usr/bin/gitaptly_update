@@ -38,13 +38,13 @@ elif [ "$MODE" = 'proxy' ]; then
     dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file \
       | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
       | flock dists/stable/main/binary-all/Packages tee -a dists/stable/main/binary-all/Packages
-    rm pool/main/$owner/$repo/$file
-    ln --symbolic /usr/bin/gitaptly_serve cgi-bin/main/$owner/$repo/$file    
+    rm pool/main/"$owner"/"$repo"/"$file"
+    ln --symbolic /usr/bin/gitaptly_serve cgi-bin/main/"$owner"/"$repo"/"$file"
   }
   export -f gitaptly_proxy_process_url
   touch dists/stable/main/binary-all/Packages
   cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
-  cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel -v gitaptly_proxy_process_url
+  cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel gitaptly_proxy_process_url
 else
   exit 1
 fi
