@@ -30,6 +30,7 @@ elif [ "$MODE" = 'proxy' ]; then
     # if [ -f /usr/bin/opentelemetry_shell.sh ]; then source /usr/bin/opentelemetry_shell.sh; fi
     set -e
     cd /var/lib/gitaptly
+    pwd
     url="$*"
     owner="$(echo "$url" | cut -d "/" -f 4)"
     repo="$(echo "$url" | cut -d "/" -f 5)"
