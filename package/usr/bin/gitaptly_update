@@ -27,8 +27,8 @@ if [ "$MODE" = 'cache' ]; then
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   gitaptly_proxy_process_url() {
-    if [ -f /usr/bin/opentelemetry_shell.sh ]; then source /usr/bin/opentelemetry_shell.sh; fi
-    set -e
+    # if [ -f /usr/bin/opentelemetry_shell.sh ]; then source /usr/bin/opentelemetry_shell.sh; fi
+    set -ex
     url="$*"
     owner="$(echo "$url" | cut -d "/" -f 4)"
     repo="$(echo "$url" | cut -d "/" -f 5)"
@@ -42,8 +42,11 @@ elif [ "$MODE" = 'proxy' ]; then
     ln --symbolic /usr/bin/gitaptly_serve cgi-bin/main/$owner/$repo/$file    
   }
   export -f gitaptly_proxy_process_url
+  touch dists/stable/main/binary-all/Packages
   cat /etc/gitaptly.conf | xargs -I {} mkdir -p cgi-bin/main/{}
   cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel gitaptly_proxy_process_url
+  echo "FINALLY DONE"
+  exit 1
 else
   exit 1
 fi
