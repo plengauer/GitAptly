@@ -21,7 +21,7 @@ source /opt/gitaptly/env
 # TODO clean if deb packages are remove
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
 
-cat /etc/gitaptly.conf | xargs mkdir -p pool/main/{}
+cat /etc/gitaptly.conf | xargs -I {} mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
   cat /etc/gitaptly.conf | sort -R | parallel bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/'
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
@@ -34,8 +34,6 @@ elif [ "$MODE" = 'proxy' ]; then
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
     if [ -f cgi-bin/main/"$owner"/"$repo"/"$file" ]; then return 0; fi
-    pwd
-    echo wget -nc -O pool/main/"$owner"/"$repo"/"$file" "$url"
     wget -nc -O pool/main/"$owner"/"$repo"/"$file" "$url"
     dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file \
       | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
