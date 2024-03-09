@@ -1,4 +1,10 @@
-#!/bin/bash
-systemctl stop gitaptly
-systemctl disable gitaptly
-exit 0
+#!/bin/bash -e
+if [ "$1" = 'remove' ] || [ "$1" = 'upgrade' ] || [ "$1" = 'deconfigure' ]; then
+  systemctl stop gitaptly
+  systemctl disable gitaptly
+elif [ "$1" = 'failed-upgrade' ]; then
+  systemctl enable gitaptly || true
+  systemctl start gitaptly || true
+else
+  exit 1
+fi
