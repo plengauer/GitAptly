@@ -30,6 +30,7 @@ elif [ "$MODE" = 'proxy' ]; then
     if [ -f /usr/bin/opentelemetry_shell.sh ]; then source /usr/bin/opentelemetry_shell.sh; fi
     set -e
     url="$*"
+    if [ -z "$url" ]; then return 0; fi
     owner="$(echo "$url" | cut -d "/" -f 4)"
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
