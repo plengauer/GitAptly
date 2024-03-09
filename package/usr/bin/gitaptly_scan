@@ -1,2 +1,2 @@
 #!/bin/bash -e
-curl -v --no-progress-meter https://api.github.com/repos/"$1"/releases | jq '.[] | .assets[] | .browser_download_url' -r | (grep '.deb$' || true)
+curl --no-progress-meter https://api.github.com/repos/"$1"/releases | jq '.[] | .assets[] | .browser_download_url' -r | (grep '.deb$' || true)
