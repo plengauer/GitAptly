@@ -1,6 +1,11 @@
-#!/bin/bash
-systemctl stop gitaptly
-if [ -L "/var/lib/gitaptly/cgi-bin" ]; then
-  rm /var/lib/gitaptly/cgi-bin
+#!/bin/bash -e
+if [ "$1" = 'install' ] || [ "$1" = 'upgrade' ]; then
+  systemctl stop gitaptly || true
+  if [ -L "/var/lib/gitaptly/cgi-bin" ]; then
+    rm /var/lib/gitaptly/cgi-bin
+  fi
+elif [ "$1" = 'abort-upgrade' ]; then
+  systemctl start gitaptly || true
+else
+  exit 1
 fi
-exit 0

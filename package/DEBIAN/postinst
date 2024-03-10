@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+if [ "$1" = 'abort-configure' ] || [ "$1" = 'abort-upgrade' ] || [ "$1" = 'abort-remove' ] || [ "$1" = 'abort-deconfigure' ]; then
+  exit 0
+elif [ "$1" != 'configure' ] && [ "$1" != 'reconfigure' ]; then
+  exit 1
+fi
+
 rm -rf /opt/gitaptly/* || true
 
 . /usr/share/debconf/confmodule
