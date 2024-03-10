@@ -27,7 +27,7 @@ if [ "$MODE" = 'cache' ]; then
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   gitaptly_proxy_process_url() {
-    if [ -f /usr/bin/opentelemetry_shell.sh ]; then source /usr/bin/opentelemetry_shell.sh; fi
+    if \[ -f /usr/bin/opentelemetry_shell.sh ]; then \source /usr/bin/opentelemetry_shell.sh; fi
     set -e
     url="$*"
     owner="$(echo "$url" | cut -d "/" -f 4)"
