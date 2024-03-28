@@ -20,7 +20,7 @@ source /opt/gitaptly/env
 
 cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | sort -R | parallel -q bash -c 'gitaptly_scan {} | xargs wget -nc -P /pool/main/{}/'
+  cat /etc/gitaptly.conf | sort -R | parallel -q bash -c 'gitaptly_scan {} | xargs -r wget -nc -P /pool/main/{}/'
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   gitaptly_proxy_process_url() {
