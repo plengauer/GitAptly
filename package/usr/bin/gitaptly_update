@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_SERVICE_NAME=GitAptly
@@ -40,7 +40,7 @@ elif [ "$MODE" = 'proxy' ]; then
   export -f gitaptly_proxy_process_url
   touch dists/stable/main/binary-all/Packages
   cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p cgi-bin/main/{}
-  cat /etc/gitaptly.conf | sort -R | parallel gitaptly_scan | parallel gitaptly_proxy_process_url
+  cat /etc/gitaptly.conf | sort -R | parallel -t gitaptly_scan | parallel -t gitaptly_proxy_process_url
 else
   exit 1
 fi
