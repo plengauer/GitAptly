@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 per_page=100
 url="https://api.github.com/repos/$1/releases?per_page=$per_page"
 
@@ -12,8 +12,8 @@ curl --no-progress-meter --head "$url" \
   | tr '&' '\n' \
   | grep '^page=' \
   | cut -d = -f 2 \
-  | xargs seq 1 \
-  | xargs parallel curl --no-progress-meter "$url"\&page={} ::: \
+  | xargs -t seq 1 \
+  | xargs -t parallel -t curl --no-progress-meter "$url"\&page={} ::: \
   | cat >&2
 
 curl --no-progress-meter --head "$url" \
@@ -26,7 +26,7 @@ curl --no-progress-meter --head "$url" \
   | tr '&' '\n' \
   | grep '^page=' \
   | cut -d = -f 2 \
-  | xargs seq 1 \
-  | xargs parallel curl --no-progress-meter "$url"\&page={} ::: \
+  | xargs -t seq 1 \
+  | xargs -t parallel -t curl --no-progress-meter "$url"\&page={} ::: \
   | jq '.[] | .assets[] | .browser_download_url' -r \
   | (grep '.deb$' || true)
