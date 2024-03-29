@@ -11,7 +11,7 @@ curl --no-progress-meter --head "$url" \
   | tr '&' '\n' \
   | grep '^page=' \
   | cut -d = -f 2 \
-  | xargs seq 1 \
-  | xargs parallel curl --no-progress-meter "$url"\&page={} ::: \
+  | xargs -t seq 1 \
+  | xargs -t parallel -t curl --no-progress-meter "$url"\&page={} ::: \
   | jq '.[] | .assets[] | .browser_download_url' -r \
   | (grep '.deb$' || true)
