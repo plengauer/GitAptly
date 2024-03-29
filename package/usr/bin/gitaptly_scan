@@ -2,6 +2,8 @@
 per_page=100
 url="https://api.github.com/repos/$1/releases?per_page=$per_page"
 
+curl --no-progress-meter --head "$url"
+
 curl --no-progress-meter --head "$url" \
   | cut -d ' '  -f 2- \
   | tr ',' '\n' \
