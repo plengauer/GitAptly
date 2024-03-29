@@ -1,6 +1,66 @@
 #!/bin/bash -e
 per_page=100
 url="https://api.github.com/repos/$1/releases?per_page=$per_page"
+
+headers="$(curl --no-progress-meter --head "$url")"
+echo "$headers" \
+  | cat >&2
+
+echo "$headers" \
+  | cut -d ' '  -f 2- \
+  | tr ',' '\n' \
+  | tr -d ' <>' \
+  | grep 'rel="last"' \
+  | cut -d ';' -f1 \
+  | cut -d '?' -f 2- \
+  | tr '&' '\n' \
+  | grep '^page=' \
+  | cut -d = -f 2 \
+  | cat >&2
+
+echo "$headers" \
+  | cut -d ' '  -f 2- \
+  | tr ',' '\n' \
+  | tr -d ' <>' \
+  | grep 'rel="last"' \
+  | cut -d ';' -f1 \
+  | cut -d '?' -f 2- \
+  | tr '&' '\n' \
+  | grep '^page=' \
+  | cut -d = -f 2 \
+  | xargs seq 1
+  | cat >&2
+
+echo "$headers" \
+  | cut -d ' '  -f 2- \
+  | tr ',' '\n' \
+  | tr -d ' <>' \
+  | grep 'rel="last"' \
+  | cut -d ';' -f1 \
+  | cut -d '?' -f 2- \
+  | tr '&' '\n' \
+  | grep '^page=' \
+  | cut -d = -f 2 \
+  | xargs seq 1
+  | xargs parallel curl --no-progress-meter "$url"\&page={} ::: \
+  | cat >&2
+
+echo "$headers" \
+  | cut -d ' '  -f 2- \
+  | tr ',' '\n' \
+  | tr -d ' <>' \
+  | grep 'rel="last"' \
+  | cut -d ';' -f1 \
+  | cut -d '?' -f 2- \
+  | tr '&' '\n' \
+  | grep '^page=' \
+  | cut -d = -f 2 \
+  | xargs seq 1
+  | xargs parallel curl --no-progress-meter "$url"\&page={} ::: \
+  | jq '.[] | .assets[] | .browser_download_url' -r \
+  | (grep '.deb$' || true)
+  | cat >&2
+
 curl --no-progress-meter --head "$url" \
   | cut -d ' '  -f 2- \
   | tr ',' '\n' \
