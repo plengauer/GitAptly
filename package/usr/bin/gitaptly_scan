@@ -47,7 +47,7 @@ echo "$headers" \
   | grep '^page=' \
   | cut -d = -f 2 \
   | xargs -t seq 1 \
-  | xargs -t parallel -t curl --no-progress-meter "$url"\&page={} ::: \
+  | xargs -t parallel -q -t curl --no-progress-meter "$url"\&page={} ::: \
   | cat >&2
 
 echo "4" >&2
@@ -62,7 +62,7 @@ echo "$headers" \
   | grep '^page=' \
   | cut -d = -f 2 \
   | xargs -t seq 1 \
-  | xargs -t parallel -t curl --no-progress-meter "$url"\&page={} ::: \
+  | xargs -t parallel -q -t curl --no-progress-meter "$url"\&page={} ::: \
   | jq '.[] | .assets[] | .browser_download_url' -r \
   | (grep '.deb$' || true) \
   | cat >&2
