@@ -9,6 +9,7 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="$OTLP_LOGS_ENDPOINT"
   export OTEL_EXPORTER_OTLP_LOGS_HEADERS=authorization=$(echo "$OTLP_LOGS_HEADER" | jq -Rr @uri)
   source otel.sh
+  observed=1
 fi
 
 path="$SCRIPT_NAME"
@@ -16,7 +17,7 @@ file=$(echo "$path" | rev | cut -d/ -f1 | rev)
 repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
-if [ -n "$otel_root_span_id" ]; then
+if [ "$observed" = 1 ]; then
   span_handle="$(otel_span_current)"
   otel_span_attribute $span_handle http.route=/$owner/$repo
   otel_span_attribute $span_handle github.repository.owner=$owner
