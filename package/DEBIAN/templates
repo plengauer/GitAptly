@@ -1,5 +1,6 @@
 Template: gitaptly/PORT
 Type: string
+Default: 8000
 Description: Port:
  Select the port where the repository should be hosted at.
 
