@@ -2,6 +2,9 @@
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_SERVICE_NAME=GitAptly
+  export OTEL_LOGS_EXPORTER=otlp
+  export OTEL_TRACES_EXPORTER=otlp
+  export OTEL_METRICS_EXPORTER=otlp
   export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
   export OTEL_EXPORTER_OTLP_TRACES_HEADERS=authorization=$(echo "$OTLP_TRACES_HEADER" | jq -Rr @uri)
   export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT="$OTLP_METRICS_ENDPOINT"
