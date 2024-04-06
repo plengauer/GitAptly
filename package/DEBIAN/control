@@ -1,5 +1,5 @@
 Package: gitaptly
-Version: 3.7.4
+Version: 3.7.5
 Architecture: all
 Depends: bash, debconf, coreutils, util-linux, findutils, jq, cron, gzip, dpkg-dev, curl, wget, parallel, python3, python3-pip, python3-venv
 Suggests: opentelemetry-shell (>= 4.0.0)
