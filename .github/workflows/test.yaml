@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+
+  test-clean-install:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get update
+      - run: sudo apt-get -y dist-upgrade
+      - uses: actions/download-artifact@v2
+        with:
+          name: package.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
+      - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
+      - run: sleep 10
+      - run: sudo apt-get update --allow-insecure-repositories
+      - run: sudo apt-get -y install --allow-unauthenticated auto-management
+      - run: sudo apt-get -y remove gitaptly
+
+  test-upgrade:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get update
+      - run: sudo apt-get -y dist-upgrade
+      - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.0.0.deb
+      - uses: actions/download-artifact@v2
+        with:
+          name: package.deb
+      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
+      - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
+      - run: sleep 10
+      - run: sudo apt-get update --allow-insecure-repositories
+      - run: sudo apt-get -y install --allow-unauthenticated auto-management
+      - run: sudo apt-get -y remove gitaptly
