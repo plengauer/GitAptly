@@ -12,7 +12,7 @@ jobs:
       run:
         working-directory: ./package
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: sudo apt-get update
       - run: sudo apt-get -y dist-upgrade
       - run: sudo apt-get install devscripts debhelper
@@ -60,7 +60,7 @@ jobs:
     needs: [build, test-clean-install, test-upgrade]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: echo "::set-output name=version::$(cat ./package/DEBIAN/control | grep 'Version' | awk -F\  '{print $2}')"
         id: version
       - uses: actions/download-artifact@v4
