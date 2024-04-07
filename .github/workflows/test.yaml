@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yaml@main
+    uses: ./.github/workflows/build.yaml
 
   test-clean-install:
     needs: build
