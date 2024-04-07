@@ -85,3 +85,4 @@ jobs:
           asset_path: ./package.deb
           asset_name: gitaptly_${{ steps.version.outputs.version }}.deb
           asset_content_type: application/octet-stream
+        continue-on-error: true
