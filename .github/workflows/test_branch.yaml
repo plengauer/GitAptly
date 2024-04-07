@@ -1,0 +1,10 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yaml@main
