@@ -13,7 +13,7 @@ jobs:
     steps:
       - run: sudo apt-get update
       - run: sudo apt-get -y dist-upgrade
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: package.deb
       - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
@@ -31,7 +31,7 @@ jobs:
       - run: sudo apt-get -y dist-upgrade
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
       - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.0.0.deb
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: package.deb
       - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
