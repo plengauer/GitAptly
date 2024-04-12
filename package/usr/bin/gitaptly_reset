@@ -1,18 +1,2 @@
 #!/bin/bash -e
-source /opt/gitaptly/env
-if [ -f /usr/bin/opentelemetry_shell.sh ]; then
-  export OTEL_SERVICE_NAME=GitAptly
-  export OTEL_LOGS_EXPORTER=otlp
-  export OTEL_TRACES_EXPORTER=otlp
-  export OTEL_METRICS_EXPORTER=otlp
-  export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
-  export OTEL_EXPORTER_OTLP_TRACES_HEADERS=authorization=$(echo "$OTLP_TRACES_HEADER" | jq -Rr @uri)
-  export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT="$OTLP_METRICS_ENDPOINT"
-  export OTEL_EXPORTER_OTLP_METRICS_HEADERS=authorization=$(echo "$OTLP_METRICS_HEADER" | jq -Rr @uri)
-  export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="$OTLP_LOGS_ENDPOINT"
-  export OTEL_EXPORTER_OTLP_LOGS_HEADERS=authorization=$(echo "$OTLP_LOGS_HEADER" | jq -Rr @uri)
-  source otel.sh
-fi
-
 parallel rm -rf ::: /var/lib/gitaptly/dists/stable/main/binary-all/Packages.gz /var/lib/gitaptly/dists/stable/main/binary-all/Packages /var/lib/gitaptly/pool/main/* /var/lib/gitaptly/cgi-bin/main/*
-gitaptly_update
