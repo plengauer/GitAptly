@@ -11,6 +11,10 @@ db_input high gitaptly/MODE || true
 db_endblock
 
 db_beginblock
+db_input high gitaptly/GITHUB_API_TOKEN || true
+db_endblock
+
+db_beginblock
 db_input high gitaptly/OTLP_TRACES_ENDPOINT || true
 db_endblock
 
