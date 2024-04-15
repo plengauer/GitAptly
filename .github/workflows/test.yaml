@@ -33,7 +33,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
-      - run: sudo rm -f /tmp/opentelemetry_*.aliases
       - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sleep 10
