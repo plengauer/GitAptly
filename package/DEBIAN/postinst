@@ -14,7 +14,7 @@ echo "PORT=$RET" >> /opt/gitaptly/env
 db_get gitaptly/MODE
 echo "MODE=$RET" >> /opt/gitaptly/env
 db_get gitaptly/GITHUB_API_TOKEN
-echo "GITHUB_API_TOKEN=$RET" >> /opt/gitaptly/env
+echo "GITHUB_API_TOKEN=\"$RET\"" >> /opt/gitaptly/env
 db_get gitaptly/OTLP_TRACES_ENDPOINT
 echo "OTLP_TRACES_ENDPOINT=\"$RET\"" >> /opt/gitaptly/env
 db_get gitaptly/OTLP_TRACES_HEADER
