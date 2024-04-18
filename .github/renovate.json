@@ -8,5 +8,5 @@
   "automerge": true,
   "automergeType": "pr",
   "assignAutomerge": true,
-  "reviewers": ["plengauer"]
+  "reviewers": ["plengauer", "probsJustin"]
 }
