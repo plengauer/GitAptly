@@ -17,8 +17,6 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
 fi
 cd /var/lib/gitaptly
 
-source /opt/gitaptly/env
-
 # TODO handle if one mode is switched to the other (packages and evrything needs to be cleared and fully re-initialized)
 # TODO clean if deb packages are remove
 # TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
