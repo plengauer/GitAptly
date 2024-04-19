@@ -11,8 +11,6 @@ jobs:
         working-directory: ./package
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt-get update
-      - run: sudo apt-get -y dist-upgrade
       - run: sudo apt-get install devscripts debhelper
       - run: sed -i "s/__VERSION__/$(cat ../VERSION)/g" DEBIAN/control
       - run: dpkg-deb --root-owner-group --build . ../package.deb

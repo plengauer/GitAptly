@@ -11,6 +11,12 @@ Default: proxy
 Description: Mode:
  Select whether the repository should cache deb files on disk or act as a pure proxy.
 
+Template: gitaptly/GITHUB_API_TOKEN
+Type: string
+Default:
+Description: GitHub API Token:
+ A valid GitHub API Token. GitAptly only accesses publicly available information, making the token optional. However, providing a token drastically increases the rate limit GitHub imposes.
+
 Template: gitaptly/OTLP_TRACES_ENDPOINT
 Type: string
 Default: 
