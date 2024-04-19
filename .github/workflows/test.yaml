@@ -11,14 +11,28 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get -y dist-upgrade
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
-      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
+      - run: sudo apt-get -y install ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
-      - run: sleep 10
+      - run: sudo apt-get update --allow-insecure-repositories
+      - run: sudo apt-get -y install --allow-unauthenticated auto-management
+      - run: sudo apt-get -y remove gitaptly
+
+  test-token:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get install -y debconf-utils
+      - run: echo gitaptly gitaptly/GITHUB_API_TOKEN string $GITHUB_API_TOKEN | sudo debconf-set-selections
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: package.deb
+      - run: sudo apt-get -y install ./package.deb
+      - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
@@ -27,15 +41,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get -y dist-upgrade
       - run: wget -O - https://raw.githubusercontent.com/plengauer/opentelemetry-bash/main/INSTALL.sh | sh -E
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
-      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
+      - run: sudo apt-get -y install ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
-      - run: sleep 10
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
@@ -44,16 +55,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get update
-      - run: sudo apt-get -y dist-upgrade
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
-      - run: sudo apt-get -y install --allow-unauthenticated ./gitaptly_2.0.0.deb
+      - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
-      - run: sudo apt-get -y install --allow-unauthenticated ./package.deb
+      - run: sudo apt-get -y install ./package.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
-      - run: sleep 10
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
