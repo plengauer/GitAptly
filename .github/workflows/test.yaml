@@ -7,15 +7,11 @@ jobs:
   build:
     uses: ./.github/workflows/build.yaml
 
-  debug:
-    runs-on: ubuntu-latest
-    steps:
-      - run: curl --version
-
   test-clean-install:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - run: curl --version
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
