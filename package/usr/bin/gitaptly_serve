@@ -1,7 +1,12 @@
 #!/bin/bash -e
-source /opt/gitaptly/env
+method="$1"
+path="$2"
 
-path="$SCRIPT_NAME"
+if [ "$method" != GET ]; then
+  printf 'HTTP/1.1 405 Method Forbidden\r\n\r\n'
+  exit 0
+fi
+
 file=$(echo "$path" | rev | cut -d/ -f1 | rev)
 repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
