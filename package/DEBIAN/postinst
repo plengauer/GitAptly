@@ -31,15 +31,6 @@ db_stop
 
 source /opt/gitaptly/env
 
-python3 -m venv /opt/gitaptly/
-source /opt/gitaptly/bin/activate
-if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ] || [ -n "$OTLP_LOGS_ENDPOINT" ]; then
-  pip3 install opentelemetry-distro opentelemetry-exporter-otlp
-  pip3 install opentelemetry-instrumentation opentelemetry-instrumentation-system-metrics
-  opentelemetry-bootstrap -a install
-fi
-deactivate
-
 if [ "$MODE" = "cache" ]; then
   find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l -exec rm {} '+' || true
 elif [ "$MODE" = "proxy" ]; then
