@@ -1,28 +1,12 @@
 #!/bin/bash -e
 source /opt/gitaptly/env
-if [ -f /usr/bin/opentelemetry_shell.sh ]; then
-  export OTEL_SERVICE_NAME=GitAptly
-  export OTEL_LOGS_EXPORTER=otlp
-  export OTEL_TRACES_EXPORTER=otlp
-  export OTEL_METRICS_EXPORTER=otlp
-  export OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-  export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="$OTLP_TRACES_ENDPOINT"
-  export OTEL_EXPORTER_OTLP_TRACES_HEADERS=authorization=$(echo "$OTLP_TRACES_HEADER" | jq -Rr @uri)
-  export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT="$OTLP_METRICS_ENDPOINT"
-  export OTEL_EXPORTER_OTLP_METRICS_HEADERS=authorization=$(echo "$OTLP_METRICS_HEADER" | jq -Rr @uri)
-  export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="$OTLP_LOGS_ENDPOINT"
-  export OTEL_EXPORTER_OTLP_LOGS_HEADERS=authorization=$(echo "$OTLP_LOGS_HEADER" | jq -Rr @uri)
-  export OTEL_SHELL_EXPERIMENTAL_OBSERVE_PIPES=TRUE
-  source otel.sh
-  observed=1
-fi
 
 path="$SCRIPT_NAME"
 file=$(echo "$path" | rev | cut -d/ -f1 | rev)
 repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
-if [ "$observed" = 1 ]; then
+if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   span_handle="$(otel_span_current)"
   otel_span_attribute $span_handle http.route=/$owner/$repo
   otel_span_attribute $span_handle github.repository.owner=$owner
@@ -35,6 +19,7 @@ if [ "$observed" = 1 ]; then
   otel_metric_add $metric_handle 1
 fi
 
-echo "Content-Type: application/vnd.debian.binary-package"
-echo ""
+printf 'HTTP/1.1 200 OK\r\n'
+printf 'Content-Type: application/vnd.debian.binary-package\r\n'
+printf '\r\n'
 gitaptly_scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
