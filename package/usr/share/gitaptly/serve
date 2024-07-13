@@ -28,4 +28,4 @@ fi
 printf 'HTTP/1.1 200 OK\r\n'
 printf 'Content-Type: application/vnd.debian.binary-package\r\n'
 printf '\r\n'
-bash -e /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
+bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
