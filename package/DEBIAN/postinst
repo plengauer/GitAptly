@@ -38,7 +38,7 @@ if [ "$MODE" = "cache" ]; then
 elif [ "$MODE" = "proxy" ]; then
   if ! [ -x /var/lib/gitaptly/pool ]; then rm -rf /var/lib/gitaptly/pool && ln --symbolic /usr/share/gitaptly/serve /var/lib/gitaptly/pool; fi
 fi
-gitaptly_update
+bash /usr/share/gitaptly/update
 
 systemctl daemon-reload
 systemctl enable gitaptly
