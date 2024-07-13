@@ -40,7 +40,7 @@ elif [ "$MODE" = 'proxy' ]; then
   touch dists/stable/main/binary-all/Packages
   index="$(mktemp)"
   cat dists/stable/main/binary-all/Packages | grep Filename | cut -d ' ' -f 2- | cut -d / -f 3- | awk -F'/' '{print "^https://.*/"$1"/"$2"/"$3"$"}' > "$index"
-  cat /etc/gitaptly.conf | sort -u | sort -R | parallel scan | grep -ve -f "$index" | parallel gitaptly_proxy_process_url
+  cat /etc/gitaptly.conf | sort -u | sort -R | parallel scan | grep -v -f "$index" | parallel gitaptly_proxy_process_url
   rm "$index"
 else
   exit 1
