@@ -6,9 +6,10 @@ else
   auth_header='foo: bar'
 fi
 per_page=100
-url="https://api.github.com/repos/$1/releases?per_page=$per_page"
-# printf 'HEAD /'"$(echo "$url" | cut -d / -f 4-)"' HTTP/1.1\r\nUser-Agent: ncat\r\nHost: '"$(echo "$url" | cut -d / -f 3)"'\r\n'"$auth_header"'\r\n\r\n' | ncat --ssl -i 3 --no-shutdown "$(echo "$url" | cut -d / -f 3)" 443 \
-curl --no-progress-meter --fail --retry 16 --retry-all-errors --head -H "$auth_header" "$url" \
+host=api.github.com
+path="/repos/$1/releases?per_page=$per_page"
+url=https://"$host""$path"
+printf "HEAD $path HTTP/1.1\r\nUser-Agent: gitaptly\r\nHost: $host\r\n$auth_header\r\n\r\n" | ncat --ssl -i 3 --no-shutdown "$host" 443 \
   | grep '^link: ' | cut -d ' '  -f 2- | tr -d ' <>' | tr ',' '\n' \
   | grep 'rel="last"' | cut -d ';' -f1 | cut -d '?' -f 2- | tr '&' '\n' \
   | grep '^page=' | cut -d = -f 2 \
