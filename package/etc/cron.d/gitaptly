@@ -1,2 +1,2 @@
-0 * * * * root gitaptly_update
+0 * * * * root /usr/share/gitaptly/update
 
