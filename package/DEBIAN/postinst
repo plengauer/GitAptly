@@ -34,10 +34,8 @@ source /opt/gitaptly/env
 
 touch /var/lib/gitaptly/pool
 if [ "$MODE" = "cache" ]; then
-  find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l -exec rm {} '+' || true # legacy
   if ! [ -d /var/lib/gitaptly/pool ]; then rm -rf /var/lib/gitaptly/pool && mkdir -p /var/lib/gitaptly/pool; fi
 elif [ "$MODE" = "proxy" ]; then
-  find /var/lib/gitaptly/pool/main/*/*/ -type f -exec rm {} '+' || true # legacy
   if ! [ -x /var/lib/gitaptly/pool ]; then rm -rf /var/lib/gitaptly/pool && ln --symbolic /usr/share/gitaptly/serve /var/lib/gitaptly/pool; fi
 fi
 gitaptly_update
