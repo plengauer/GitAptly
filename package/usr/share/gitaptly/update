@@ -30,7 +30,7 @@ elif [ "$MODE" = 'proxy' ]; then
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
     temporary="$(mktemp -d)"
-    wget -nc -O "$temporary"/package.deb" "$url"
+    wget -nc -O "$temporary"/package.deb "$url"
     dpkg-scanpackages --multiversion "$temporary"/package.deb \
       | sed "s/Filename: .*/Filename: pool\/main\/$owner\/$repo\/$file/" \
       | flock dists/stable/main/binary-all/Packages tee -a dists/stable/main/binary-all/Packages > /dev/null
