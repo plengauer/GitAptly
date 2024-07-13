@@ -60,6 +60,8 @@ jobs:
       - run: wget -O - https://raw.githubusercontent.com/plengauer/abom-http/main/INSTALL.sh | sh
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
       - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
+      - run: wget https://github.com/plengauer/GitAptly/releases/download/v3.14.0/gitaptly_3.14.0.deb
+      - run: sudo apt-get -y install ./gitaptly_3.14.0.deb
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
