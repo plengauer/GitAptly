@@ -10,7 +10,7 @@ per_page=100
 host=api.github.com
 path="/repos/$1/releases?per_page=$per_page"
 url=https://"$host""$path"
-printf "HEAD $path HTTP/1.1\r\nUser-Agent: gitaptly\r\nHost: $host\r\n$auth_header\r\n\r\n" | ncat --ssl -i 3 --no-shutdown "$host" 443 \
+printf "HEAD $path HTTP/1.1\r\nUser-Agent: gitaptly\r\nHost: $host\r\n$auth_header\r\n\r\n" | ncat --ssl --no-shutdown "$host" 443 \
   | grep '^link: ' | cut -d ' '  -f 2- | tr -d ' <>' | tr ',' '\n' \
   | grep 'rel="last"' | cut -d ';' -f1 | cut -d '?' -f 2- | tr '&' '\n' \
   | grep '^page=' | cut -d = -f 2 \
