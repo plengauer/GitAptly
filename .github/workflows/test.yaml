@@ -97,3 +97,9 @@ jobs:
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
+
+  test-all:
+    needs: [ test-clean-install, test-token, test-observed, test-upgrade ]
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
