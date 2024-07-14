@@ -26,6 +26,8 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
 fi
 
 printf 'HTTP/1.1 200 OK\r\n'
-printf 'Content-Type: application/vnd.debian.binary-package\r\n'
+printf 'content-length: 1180\r\n'
+printf 'content-encoding: identity\r\n'
+printf 'content-type: application/vnd.debian.binary-package\r\n'
 printf '\r\n'
 bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
