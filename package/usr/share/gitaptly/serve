@@ -25,8 +25,12 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   otel_metric_add $metric_handle 1
 fi
 
-printf 'HTTP/1.1 200 OK\r\n'
-printf 'content-encoding: identity\r\n'
-printf 'content-type: application/vnd.debian.binary-package\r\n'
+#printf 'HTTP/1.1 200 OK\r\n'
+#printf 'content-encoding: identity\r\n'
+#printf 'content-type: application/vnd.debian.binary-package\r\n'
+#printf '\r\n'
+#bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
+
+printf 'HTTP/1.1 308 Permanent Redirect\r\n'
+printf 'location: ' && bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 && printf '\r\n'
 printf '\r\n'
-bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
