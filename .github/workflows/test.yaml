@@ -27,7 +27,7 @@ jobs:
       - run: wget http://127.0.0.1:8000/pool/main/plengauer/Utilities/auto_management_1.3.3.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sudo apt-get update --allow-insecure-repositories
-      - run: sudo apt-get -y install --allow-unauthenticated auto-management
+      - run: sudo apt-get -y install --allow-unauthenticated auto-management || cat /var/log/apt/term.log /var/log/apt/history.log
       - run: sudo apt-get -y remove gitaptly
 
   test-token:
