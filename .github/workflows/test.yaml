@@ -23,8 +23,8 @@ jobs:
       - run: sudo apt-get -y install ./package.deb
       - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly
       - run: ps -ef | grep ncat
-      - run: wget http://127.0.0.1:8000/dists/stable/main/binary-all/Packages
-      - run: wget http://127.0.0.1:8000/pool/main/plengauer/Utilities/auto_management_1.3.3.deb
+      - run: time wget http://127.0.0.1:8000/dists/stable/main/binary-all/Packages
+      - run: time wget http://127.0.0.1:8000/pool/main/plengauer/Utilities/auto_management_1.3.3.deb
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -oDebug::pkgAcquire::Worker=1 -y install --allow-unauthenticated auto-management
