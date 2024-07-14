@@ -36,7 +36,8 @@ touch /var/lib/gitaptly/pool
 if [ "$MODE" = "cache" ]; then
   if ! [ -d /var/lib/gitaptly/pool ]; then rm -rf /var/lib/gitaptly/pool && mkdir -p /var/lib/gitaptly/pool; fi
 elif [ "$MODE" = "proxy" ]; then
-  if ! [ -x /var/lib/gitaptly/pool ]; then rm -rf /var/lib/gitaptly/pool && ln --symbolic /usr/share/gitaptly/serve /var/lib/gitaptly/pool; fi
+  rm -rf /var/lib/gitaptly/pool || true
+  ln --symbolic /usr/share/gitaptly/serve /var/lib/gitaptly/pool
 fi
 bash /usr/share/gitaptly/update
 
