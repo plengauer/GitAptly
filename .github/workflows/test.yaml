@@ -81,15 +81,15 @@ jobs:
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
       - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
-      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly
+      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v3.14.0/gitaptly_3.14.0.deb
       - run: sudo apt-get -y install ./gitaptly_3.14.0.deb
-      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly
+      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
       - uses: actions/download-artifact@v4
         with:
           name: package.deb
       - run: sudo apt-get -y install ./package.deb
-      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly
+      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
       - run: echo "deb [arch=all] http://127.0.0.1:8000/ stable main" | sudo tee /etc/apt/sources.list.d/example.list
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
