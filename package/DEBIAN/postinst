@@ -7,7 +7,8 @@ elif [ "$1" != 'configure' ] && [ "$1" != 'reconfigure' ]; then
 fi
 
 rm -rf /opt/gitaptly/* || true
-rm -rf /var/lib/gitaptly/cgi-bin || true # legacy
+rm -rf /var/lib/gitaptly/cgi-bin && sed "s/cgi-bin/pool/" /var/lib/gitaptly/dists/stable/main/binary-all/Packages || true # legacy
+
 
 . /usr/share/debconf/confmodule
 db_get gitaptly/PORT
