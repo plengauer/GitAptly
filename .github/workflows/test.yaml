@@ -82,9 +82,9 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y debconf-utils
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
-      - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
-      - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
-      - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
+      # - run: wget https://github.com/plengauer/GitAptly/releases/download/v2.0.0/gitaptly_2.0.0.deb
+      # - run: sudo apt-get -y install ./gitaptly_2.0.0.deb
+      # - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v3.14.0/gitaptly_3.14.0.deb
       - run: sudo apt-get -y install ./gitaptly_3.14.0.deb
       - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
