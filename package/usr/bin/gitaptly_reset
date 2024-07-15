@@ -1,2 +1,0 @@
-#!/bin/bash -e
-parallel rm -rf ::: /var/lib/gitaptly/dists/stable/main/binary-all/Packages.gz /var/lib/gitaptly/dists/stable/main/binary-all/Packages /var/lib/gitaptly/pool/main/* /var/lib/gitaptly/cgi-bin/main/*

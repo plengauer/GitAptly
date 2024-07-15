@@ -7,6 +7,8 @@ elif [ "$1" != 'configure' ] && [ "$1" != 'reconfigure' ]; then
 fi
 
 rm -rf /opt/gitaptly/* || true
+rm -rf /var/lib/gitaptly/cgi-bin && sed -i "s/cgi-bin/pool/" /var/lib/gitaptly/dists/stable/main/binary-all/Packages || true # legacy
+
 
 . /usr/share/debconf/confmodule
 db_get gitaptly/PORT
@@ -31,21 +33,14 @@ db_stop
 
 source /opt/gitaptly/env
 
-python3 -m venv /opt/gitaptly/
-source /opt/gitaptly/bin/activate
-if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ] || [ -n "$OTLP_LOGS_ENDPOINT" ]; then
-  pip3 install opentelemetry-distro opentelemetry-exporter-otlp
-  pip3 install opentelemetry-instrumentation opentelemetry-instrumentation-system-metrics
-  opentelemetry-bootstrap -a install
-fi
-deactivate
-
+touch /var/lib/gitaptly/pool
 if [ "$MODE" = "cache" ]; then
-  find /var/lib/gitaptly/cgi-bin/main/*/*/ -type l -exec rm {} '+' || true
+  if ! [ -d /var/lib/gitaptly/pool ]; then rm -rf /var/lib/gitaptly/pool && mkdir -p /var/lib/gitaptly/pool; fi
 elif [ "$MODE" = "proxy" ]; then
-  find /var/lib/gitaptly/pool/main/*/*/ -type f -exec rm {} '+' || true
+  rm -rf /var/lib/gitaptly/pool || true
+  ln --symbolic /usr/share/gitaptly/serve /var/lib/gitaptly/pool
 fi
-gitaptly_update
+bash /usr/share/gitaptly/update
 
 systemctl daemon-reload
 systemctl enable gitaptly

@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 source /opt/gitaptly/env
 if [ -f /usr/bin/opentelemetry_shell.sh ]; then
   export OTEL_SERVICE_NAME=GitAptly
@@ -17,36 +18,33 @@ if [ -f /usr/bin/opentelemetry_shell.sh ]; then
 fi
 cd /var/lib/gitaptly
 
-# TODO handle if one mode is switched to the other (packages and evrything needs to be cleared and fully re-initialized)
-# TODO clean if deb packages are remove
-# TODO better recovery in proxy mode, check if Packages is there, and if not, redo a full scan
-
-cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p pool/main/{}
 if [ "$MODE" = 'cache' ]; then
-  cat /etc/gitaptly.conf | sort -u | sort -R | parallel -q bash -c 'gitaptly_scan {} | xargs -r wget -nc -P /pool/main/{}/'
+  cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p pool/main/{}
+  cat /etc/gitaptly.conf | sort -u | sort -R | parallel -q bash -c 'bash /usr/share/gitaptly/scan {} | xargs -r wget -nc -P pool/main/{}/'
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
-  gitaptly_proxy_process_url() {
+  indexify() {
     set -e
     url="$*"
     owner="$(echo "$url" | cut -d "/" -f 4)"
     repo="$(echo "$url" | cut -d "/" -f 5)"
     file="$(echo "$url" | rev | cut -d "/" -f 1 | rev)"
-    if [ -f cgi-bin/main/"$owner"/"$repo"/"$file" ]; then return 0; fi
-    wget -nc -O pool/main/"$owner"/"$repo"/"$file" "$url"
-    dpkg-scanpackages --multiversion pool/main/$owner/$repo/$file \
-      | sed "s/Filename: .*/Filename: cgi-bin\/main\/$owner\/$repo\/$file/" \
+    temporary="$(mktemp -d)"
+    wget -nc -O "$temporary"/package.deb "$url"
+    dpkg-scanpackages --multiversion "$temporary"/package.deb \
+      | sed "s/Filename: .*/Filename: pool\/main\/$owner\/$repo\/$file/" \
       | flock dists/stable/main/binary-all/Packages tee -a dists/stable/main/binary-all/Packages > /dev/null
-    rm pool/main/"$owner"/"$repo"/"$file"
-    ln --symbolic /usr/bin/gitaptly_serve cgi-bin/main/"$owner"/"$repo"/"$file"
+    rm -rf "$temporary"
   }
-  export -f gitaptly_proxy_process_url
+  export -f indexify
   touch dists/stable/main/binary-all/Packages
-  cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p cgi-bin/main/{}
-  cat /etc/gitaptly.conf | sort -u | sort -R | parallel gitaptly_scan | parallel gitaptly_proxy_process_url
+  index="$(mktemp)"
+  cat dists/stable/main/binary-all/Packages | grep '^Filename: ' | cut -d ' ' -f 2- | cut -d / -f 3- | awk -F'/' '{print "^https://.*/"$1"/"$2"/.*/"$3"$"}' > "$index"
+  cat /etc/gitaptly.conf | sort -u | sort -R | parallel bash /usr/share/gitaptly/scan | grep -v -f "$index" | parallel indexify
+  rm "$index"
 else
   exit 1
 fi
 
 gzip -9 < dists/stable/main/binary-all/Packages > dists/stable/main/binary-all/Packages.gz
-gitaptly_create_release dists/stable > dists/stable/Release
+bash /usr/share/gitaptly/create_release dists/stable > dists/stable/Release

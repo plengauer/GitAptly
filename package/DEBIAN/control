@@ -1,7 +1,7 @@
 Package: gitaptly
 Version: __VERSION__
 Architecture: all
-Depends: bash, debconf, coreutils, util-linux, findutils, jq, cron, gzip, dpkg-dev, curl, wget, parallel, python3, python3-pip, python3-venv
+Depends: bash, debconf, coreutils, util-linux, findutils, jq, cron, gzip, dpkg-dev, curl, wget, parallel, abom-http
 Suggests: opentelemetry-shell (>= 4.4.2)
 Priority: extra
 Maintainer: Philipp Lengauer <p.lengauer@gmail.com>
