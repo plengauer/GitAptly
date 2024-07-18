@@ -20,11 +20,11 @@ if [ -z "$url" ]; then
 fi
 
 printf 'HTTP/1.1 308 Permanent Redirect\r\n'
-printf 'location: '"$location"'\r\n'
+printf 'location: '"$url"'\r\n'
 printf '\r\n'
 
 # printf 'HTTP/1.1 200 OK\r\n'
 # printf 'content-encoding: identity\r\n'
 # printf 'content-type: application/vnd.debian.binary-package\r\n'
 # printf '\r\n'
-# wget -O - "$location"
+# wget -O - "$url"
