@@ -14,4 +14,4 @@ if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ]; then
   export OTEL_EXPORTER_OTLP_LOGS_HEADERS=authorization=$(echo "$OTLP_LOGS_HEADER" | jq -Rr @uri)
   export OTEL_SHELL_EXPERIMENTAL_OBSERVE_PIPES=TRUE
 fi
-abomhttp "$PORT" /var/lib/gitaptly
+exec abomhttp "$PORT" /var/lib/gitaptly
