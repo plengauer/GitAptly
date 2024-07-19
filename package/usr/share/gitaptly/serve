@@ -12,25 +12,19 @@ file=$(echo "$path" | rev | cut -d/ -f1 | rev)
 repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
-# if [ -f /usr/bin/opentelemetry_shell.sh ]; then
-#   span_handle="$(otel_span_current)"
-#   otel_span_attribute $span_handle http.route=/$owner/$repo
-#   otel_span_attribute $span_handle github.repository.owner=$owner
-#   otel_span_attribute $span_handle github.repository.name=$repo
-#   otel_span_attribute $span_handle github.repository.file=$file
-#   metric_handle=$(otel_metric_create "gitaptly.downloads")
-#   otel_metric_attribute $metric_handle github.repository.owner=$owner
-#   otel_metric_attribute $metric_handle github.repository.repo=$repo
-#   otel_metric_attribute $metric_handle github.repository.file=$file
-#   otel_metric_add $metric_handle 1
-# fi
+url="$(bash -e /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1)"
 
-printf 'HTTP/1.1 200 OK\r\n'
-printf 'content-encoding: identity\r\n'
-printf 'content-type: application/vnd.debian.binary-package\r\n'
+if [ -z "$url" ]; then
+  printf 'HTTP/1.1 404 Not Found\r\n\r\n'
+  exit 0
+fi
+
+printf 'HTTP/1.1 308 Permanent Redirect\r\n'
+printf 'location: '"$url"'\r\n'
 printf '\r\n'
-bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 | xargs wget -O -
 
-# printf 'HTTP/1.1 308 Permanent Redirect\r\n'
-# printf 'location: ' && bash /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1 && printf '\r\n'
+# printf 'HTTP/1.1 200 OK\r\n'
+# printf 'content-encoding: identity\r\n'
+# printf 'content-type: application/vnd.debian.binary-package\r\n'
 # printf '\r\n'
+# wget -O - "$url"
