@@ -20,7 +20,7 @@ cd /var/lib/gitaptly
 
 if [ "$MODE" = 'cache' ]; then
   cat /etc/gitaptly.conf | xargs -r -I {} mkdir -p pool/main/{}
-  cat /etc/gitaptly.conf | sort -u | sort -R | parallel -q bash -c 'bash /usr/share/gitaptly/scan {} | xargs -r wget -nc -P pool/main/{}/'
+  cat /etc/gitaptly.conf | sort -u | sort -R | parallel -q bash -c 'bash -e /usr/share/gitaptly/scan {} | xargs -r wget -nc -P pool/main/{}/'
   dpkg-scanpackages --multiversion pool/ > dists/stable/main/binary-all/Packages
 elif [ "$MODE" = 'proxy' ]; then
   indexify() {
@@ -40,11 +40,11 @@ elif [ "$MODE" = 'proxy' ]; then
   touch dists/stable/main/binary-all/Packages
   index="$(mktemp)"
   cat dists/stable/main/binary-all/Packages | grep '^Filename: ' | cut -d ' ' -f 2- | cut -d / -f 3- | awk -F'/' '{print "^https://.*/"$1"/"$2"/.*/"$3"$"}' > "$index"
-  cat /etc/gitaptly.conf | sort -u | sort -R | parallel bash /usr/share/gitaptly/scan | grep -v -f "$index" | parallel indexify
+  cat /etc/gitaptly.conf | sort -u | sort -R | parallel bash -e /usr/share/gitaptly/scan | grep -v -f "$index" | parallel indexify
   rm "$index"
 else
   exit 1
 fi
 
 gzip -9 < dists/stable/main/binary-all/Packages > dists/stable/main/binary-all/Packages.gz
-bash /usr/share/gitaptly/create_release dists/stable > dists/stable/Release
+bash -e /usr/share/gitaptly/create_release dists/stable > dists/stable/Release
