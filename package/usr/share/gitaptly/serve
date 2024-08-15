@@ -1,5 +1,4 @@
-#!/bin/bash
-set -e
+#!/bin/bash -e
 method="$1"
 path="$2"
 
@@ -12,7 +11,7 @@ file=$(echo "$path" | rev | cut -d/ -f1 | rev)
 repo=$(echo "$path" | rev | cut -d/ -f2 | rev)
 owner=$(echo "$path" | rev | cut -d/ -f3 | rev)
 
-url="$(bash -e /usr/share/gitaptly/scan $owner/$repo | grep "$file"'$' | head --lines=1)"
+url="$(scan $owner/$repo | grep "$file"'$' | head --lines=1)"
 
 if [ -z "$url" ]; then
   printf 'HTTP/1.1 404 Not Found\r\n\r\n'
@@ -22,9 +21,3 @@ fi
 printf 'HTTP/1.1 308 Permanent Redirect\r\n'
 printf 'location: '"$url"'\r\n'
 printf '\r\n'
-
-# printf 'HTTP/1.1 200 OK\r\n'
-# printf 'content-encoding: identity\r\n'
-# printf 'content-type: application/vnd.debian.binary-package\r\n'
-# printf '\r\n'
-# wget -O - "$url"
