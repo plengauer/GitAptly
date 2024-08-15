@@ -1,8 +1,7 @@
 #!/bin/bash -e
+export PATH=/usr/share/gitaptly:"$PATH"
 method="$1"
 path="$2"
-
-export PATH=/usr/share/gitaptly:"$PATH"
 
 if [ "$method" != GET ]; then
   printf 'HTTP/1.1 405 Method Forbidden\r\n\r\n'
