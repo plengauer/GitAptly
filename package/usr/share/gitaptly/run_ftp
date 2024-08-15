@@ -1,4 +1,5 @@
 #!/bin/bash -e
+export PATH=/usr/share/gitaptly:"$PATH"
 source /opt/gitaptly/env
 if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ]; then
   export OTEL_SERVICE_NAME=GitAptly
@@ -12,6 +13,6 @@ if [ -n "$OTLP_TRACES_ENDPOINT" ] || [ -n "$OTLP_METRICS_ENDPOINT" ]; then
   export OTEL_EXPORTER_OTLP_METRICS_HEADERS=authorization=$(echo "$OTLP_METRICS_HEADER" | jq -Rr @uri)
   export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT="$OTLP_LOGS_ENDPOINT"
   export OTEL_EXPORTER_OTLP_LOGS_HEADERS=authorization=$(echo "$OTLP_LOGS_HEADER" | jq -Rr @uri)
-  export OTEL_SHELL_EXPERIMENTAL_OBSERVE_PIPES=TRUE
+  export OTEL_SHELL_CONFIG_OBSERVE_PIPES=TRUE
 fi
 exec abomhttp "$PORT" /var/lib/gitaptly
