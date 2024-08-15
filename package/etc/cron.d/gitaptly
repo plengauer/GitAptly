@@ -1,1 +1,1 @@
-0 * * * * root /usr/share/gitaptly/update -e
+0 * * * * root /bin/sh -c 'PATH=/usr/share/gitaptly:"$PATH"; exec update'
