@@ -1,2 +1,1 @@
-0 * * * * root /usr/share/gitaptly/update
-
+0 * * * * root /bin/sh -c 'export PATH=/usr/share/gitaptly:"$PATH"; exec update'

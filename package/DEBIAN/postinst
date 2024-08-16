@@ -1,4 +1,5 @@
 #!/bin/bash -e
+export PATH=/usr/share/gitaptly:"$PATH"
 
 if [ "$1" = 'abort-configure' ] || [ "$1" = 'abort-upgrade' ] || [ "$1" = 'abort-remove' ] || [ "$1" = 'abort-deconfigure' ]; then
   exit 0
@@ -40,7 +41,7 @@ elif [ "$MODE" = "proxy" ]; then
   rm -rf /var/lib/gitaptly/pool || true
   ln --symbolic /usr/share/gitaptly/serve /var/lib/gitaptly/pool
 fi
-bash /usr/share/gitaptly/update
+update
 
 systemctl daemon-reload
 systemctl enable gitaptly
