@@ -16,11 +16,11 @@ jobs:
         env:
           OTEL_EXPORTER_OTLP_ENDPOINT: '${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}'
           OTEL_EXPORTER_OTLP_HEADERS: '${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}'
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.0.0
       - run: sudo apt-get update && sudo apt-get install devscripts debhelper
       - run: sed -i "s/__VERSION__/$(cat ../VERSION)/g" DEBIAN/control
       - run: dpkg-deb --root-owner-group --build . ../package.deb
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4.0.0
         with:
           name: package.deb
           path: package.deb
