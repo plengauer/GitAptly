@@ -17,7 +17,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y debconf-utils
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
-      - uses: actions/download-artifact@v4.3.0
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: package.deb
       - run: sudo apt-get -y install ./package.deb
@@ -43,7 +43,7 @@ jobs:
       - run: echo gitaptly gitaptly/GITHUB_API_TOKEN string $GITHUB_API_TOKEN | sudo debconf-set-selections
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/download-artifact@v4.3.0
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: package.deb
       - run: sudo apt-get -y install ./package.deb
@@ -63,7 +63,7 @@ jobs:
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
       - run: wget -O - https://raw.githubusercontent.com/plengauer/opentelemetry-bash/main/INSTALL.sh | sh -E
-      - uses: actions/download-artifact@v4.3.0
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: package.deb
       - run: sudo apt-get -y install ./package.deb
@@ -88,7 +88,7 @@ jobs:
       - run: wget https://github.com/plengauer/GitAptly/releases/download/v3.14.0/gitaptly_3.14.0.deb
       - run: sudo apt-get -y install ./gitaptly_3.14.0.deb
       - run: cat /var/lib/gitaptly/dists/stable/main/binary-all/Packages && find /var/lib/gitaptly && ls -la /var/lib/gitaptly/*/main/*/* || true
-      - uses: actions/download-artifact@v4.3.0
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: package.deb
       - run: sudo apt-get -y install ./package.deb
