@@ -14,6 +14,12 @@ jobs:
       matrix:
         mode: ['cache', 'proxy']
     steps:
+      - uses: plengauer/opentelemetry-github/actions/instrument/job@v5.36.0
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+        with:
+          secrets_to_redact: '["${{ github.token }}"]'
       - run: sudo apt-get update && sudo apt-get install -y debconf-utils
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
@@ -29,7 +35,8 @@ jobs:
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
-
+    permissions:
+      actions: read
   test-token:
     needs: build
     runs-on: ubuntu-latest
@@ -37,6 +44,12 @@ jobs:
       matrix:
         mode: ['cache', 'proxy']
     steps:
+      - uses: plengauer/opentelemetry-github/actions/instrument/job@v5.36.0
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+        with:
+          secrets_to_redact: '["${{ github.token }}","${{ secrets.GITHUB_TOKEN }}"]'
       - run: sudo apt-get update && sudo apt-get install -y debconf-utils
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
@@ -51,7 +64,8 @@ jobs:
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
-
+    permissions:
+      actions: read
   test-observed:
     needs: build
     runs-on: ubuntu-latest
@@ -59,10 +73,16 @@ jobs:
       matrix:
         mode: ['cache', 'proxy']
     steps:
+      - uses: plengauer/opentelemetry-github/actions/instrument/job@v5.36.0
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+        with:
+          secrets_to_redact: '["${{ github.token }}"]'
       - run: sudo apt-get update && sudo apt-get install -y debconf-utils
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
-      - run: wget -O - https://raw.githubusercontent.com/plengauer/opentelemetry-bash/main/INSTALL.sh | sh -E
+      - run: wget -O - https://raw.githubusercontent.com/plengauer/opentelemetry-github/main/INSTALL.sh | sh -E
       - uses: actions/download-artifact@v6.0.0
         with:
           name: package.deb
@@ -71,7 +91,8 @@ jobs:
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
-
+    permissions:
+      actions: read
   test-upgrade:
     needs: build
     runs-on: ubuntu-latest
@@ -79,6 +100,12 @@ jobs:
       matrix:
         mode: ['cache', 'proxy']
     steps:
+      - uses: plengauer/opentelemetry-github/actions/instrument/job@v5.36.0
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+        with:
+          secrets_to_redact: '["${{ github.token }}"]'
       - run: sudo apt-get update && sudo apt-get install -y debconf-utils
       - run: echo gitaptly gitaptly/MODE string ${{ matrix.mode }} | sudo debconf-set-selections
       - run: curl https://api.github.com/repos/plengauer/abom-http/releases/latest | jq -r '.assets[].browser_download_url' | xargs wget -O ./abomhttp.deb && sudo apt-get install ./abomhttp.deb
@@ -97,9 +124,18 @@ jobs:
       - run: sudo apt-get update --allow-insecure-repositories
       - run: sudo apt-get -y install --allow-unauthenticated auto-management
       - run: sudo apt-get -y remove gitaptly
-
+    permissions:
+      actions: read
   test-all:
     needs: [ test-clean-install, test-token, test-observed, test-upgrade ]
     runs-on: ubuntu-latest
     steps:
+      - uses: plengauer/opentelemetry-github/actions/instrument/job@v5.36.0
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: ${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}
+          OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
+        with:
+          secrets_to_redact: '["${{ github.token }}"]'
       - run: exit 0
+    permissions:
+      actions: read
