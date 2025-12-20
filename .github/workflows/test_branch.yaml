@@ -8,3 +8,5 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/test.yaml
+    permissions:
+      actions: read
