@@ -24,5 +24,4 @@ jobs:
           OTEL_EXPORTER_OTLP_HEADERS: '${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}'
         with:
           github_token: '${{ secrets.ACTIONS_GITHUB_TOKEN }}'
-    permissions:
-      actions: read
+          workflow_level_instrumentation_exclude: 'Test'
