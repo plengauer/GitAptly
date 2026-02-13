@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: plengauer/opentelemetry-bash/actions/instrument/job@v5.42.2
+      - uses: plengauer/opentelemetry-bash/actions/instrument/job@v5.43.1
         with:
           secrets_to_redact: '${{ toJSON(secrets) }}'
         env:
