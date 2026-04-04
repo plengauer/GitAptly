@@ -1,4 +1,4 @@
-name: Update Dabian Repository
+name: Update Package Repository
 
 on:
   release:
@@ -7,7 +7,10 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/update_deb_repository.yml
+      - .github/workflows/update_package_repository.yml
+
+concurrency:
+  group: update-package-repository
       
 jobs:
   publish:
@@ -16,7 +19,7 @@ jobs:
       pages: write
       id-token: write
     steps:
-      - uses: plengauer/create-deb-repository@v0.1.0
+      - uses: plengauer/create-package-repository@v0.1.0
       - uses: actions/upload-pages-artifact@v4.0.0
         with:
           path: .
