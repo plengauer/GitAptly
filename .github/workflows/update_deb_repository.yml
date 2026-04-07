@@ -19,7 +19,7 @@ jobs:
       pages: write
       id-token: write
     steps:
-      - uses: plengauer/create-package-repository@v0.1.0
+      - uses: plengauer/create-package-repository@v0.3.0
       - uses: actions/upload-pages-artifact@v4.0.0
         with:
           path: .
