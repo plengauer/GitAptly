@@ -11,6 +11,11 @@ concurrency:
 jobs:
   renovate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      security-events: write
     steps:
       - uses: plengauer/opentelemetry-bash/actions/instrument/job@215271fe54efbdffbece78b02493f7ecd73678f8 # v5.50.0
         with:
