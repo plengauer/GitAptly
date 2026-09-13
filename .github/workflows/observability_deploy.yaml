@@ -13,7 +13,7 @@ jobs:
     concurrency:
       group: otel-deploy-job-${{ github.ref_name }}
     steps:
-      - uses: plengauer/Thoth/actions/instrument/deploy@5d8cb00c1ec6a0a9772f30e7c3045d87b9f6609e # v5.58.0
+      - uses: plengauer/Thoth/actions/instrument/deploy@4b71071b2b044a176398118df98bb6b897a8458e # v5.61.4
         env:
           OTEL_EXPORTER_OTLP_ENDPOINT: '${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}'
           OTEL_EXPORTER_OTLP_HEADERS: '${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}'

@@ -10,13 +10,13 @@ jobs:
       run:
         working-directory: ./package
     steps:
-      - uses: plengauer/opentelemetry-bash/actions/instrument/job@5d8cb00c1ec6a0a9772f30e7c3045d87b9f6609e # v5.58.0
+      - uses: plengauer/opentelemetry-bash/actions/instrument/job@4b71071b2b044a176398118df98bb6b897a8458e # v5.61.4
         with:
           secrets_to_redact: '${{ toJSON(secrets) }}'
         env:
           OTEL_EXPORTER_OTLP_ENDPOINT: '${{ secrets.OTEL_EXPORTER_OTLP_ENDPOINT }}'
           OTEL_EXPORTER_OTLP_HEADERS: '${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}'
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: sudo apt-get update && sudo apt-get install devscripts debhelper
       - run: sed -i "s/__VERSION__/$(cat ../VERSION)/g" DEBIAN/control
       - run: dpkg-deb --root-owner-group --build . ../package.deb
